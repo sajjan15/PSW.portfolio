@@ -1,0 +1,625 @@
+<!doctype html>
+<html lang="en-US" class="antialiased">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+  <title>Sajjan Gautam — PSW Portfolio</title>
+  <meta name="description" content="PSW-focused portfolio: certificates, placements, languages, and education timeline." />
+  <meta name="author" content="Sajjan Gautam" />
+  <meta name="color-scheme" content="light dark" />
+
+  <!-- Tailwind config (CDN, no build step) -->
+  <script>
+    tailwind = window.tailwind || {};
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0fdff',
+              100: '#d9fbff',
+              300: '#79f0ff',
+              500: '#06b6d4',
+              700: '#0891b2'
+            }
+          },
+          fontFamily: {
+            heading: ['Poppins', 'ui-sans-serif', 'system-ui'],
+            body: ['Nunito', 'ui-sans-serif', 'system-ui'],
+            mono: ['Fira Code', 'ui-monospace', 'SFMono-Regular']
+          },
+          boxShadow: {
+            fancy: '0 12px 44px rgba(2,6,23,0.55), inset 0 1px 0 rgba(255,255,255,0.03)',
+            glow: '0 0 0 2px rgba(6,182,212,0.35), 0 12px 40px rgba(6,182,212,0.18)'
+          },
+          keyframes: {
+            floaty: {
+              '0%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-8px)' },
+              '100%': { transform: 'translateY(0)' }
+            },
+            hue: {
+              '0%': { filter: 'hue-rotate(0deg)' },
+              '100%': { filter: 'hue-rotate(360deg)' }
+            }
+          },
+          animation: {
+            floaty: 'floaty 6s ease-in-out infinite',
+            hue: 'hue 12s linear infinite'
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- Tailwind CDN (as requested) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&family=Nunito:wght@300;400;700&family=Poppins:wght@600;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Font Awesome (no kit required; works immediately) -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    referrerpolicy="no-referrer"
+  />
+
+  <!-- Local CSS -->
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+
+<body class="bg-gradient-to-b from-slate-50 to-slate-200 text-slate-800 dark:from-slate-950 dark:to-slate-900 dark:text-slate-100 font-body overflow-x-hidden">
+
+  <!-- Skip link for keyboard users -->
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <!-- Ambient background blobs (decorative) -->
+  <div aria-hidden="true" class="fixed inset-0 -z-10 overflow-hidden">
+    <div class="absolute -left-40 -top-40 w-[780px] h-[780px] rounded-full bg-gradient-to-br from-cyan-500/15 to-violet-600/10 blur-3xl animate-hue"></div>
+    <div class="absolute right-[-160px] top-20 w-[560px] h-[560px] rounded-full bg-gradient-to-tr from-rose-400/10 to-indigo-500/8 blur-3xl"></div>
+  </div>
+
+  <!-- Header -->
+  <header class="max-w-6xl mx-auto px-6 md:px-8 py-6 flex items-center justify-between gap-4">
+    <a href="#top" class="flex items-center gap-3 min-w-0">
+      <div id="logo" class="w-12 h-12 shrink-0 rounded-2xl bg-gradient-to-br from-cyan-400 to-violet-600 flex items-center justify-center text-[#021126] font-heading text-lg shadow-fancy animate-floaty">
+        SG
+      </div>
+      <div class="min-w-0">
+        <!-- Replace name if desired -->
+        <h1 class="text-xl md:text-2xl font-heading truncate">
+          Sajjan <span class="text-brand-700 dark:text-brand-300 font-extrabold">Gautam</span>
+        </h1>
+        <p class="text-xs md:text-sm text-slate-600 dark:text-slate-400 -mt-0.5">
+          PSW Student • Healthcare Support • Former Software Dev Student
+        </p>
+      </div>
+    </a>
+
+    <div class="flex items-center gap-2">
+      <nav aria-label="Primary" class="flex flex-wrap items-center gap-2 justify-end">
+        <a href="#about" class="px-3 py-2 rounded-md bg-black/5 text-slate-700 hover:bg-black/10 dark:bg-white/5 dark:text-slate-200 dark:hover:bg-white/10 transition">About</a>
+        <a href="#certificates" class="px-3 py-2 rounded-md bg-black/5 text-slate-700 hover:bg-black/10 dark:bg-white/5 dark:text-slate-200 dark:hover:bg-white/10 transition">Certificates</a>
+        <a href="#skills" class="px-3 py-2 rounded-md bg-black/5 text-slate-700 hover:bg-black/10 dark:bg-white/5 dark:text-slate-200 dark:hover:bg-white/10 transition">Skills</a>
+        <a href="#timeline" class="px-3 py-2 rounded-md bg-black/5 text-slate-700 hover:bg-black/10 dark:bg-white/5 dark:text-slate-200 dark:hover:bg-white/10 transition">Timeline</a>
+        <a href="#contact" class="px-3 py-2 rounded-md bg-black/5 text-slate-700 hover:bg-black/10 dark:bg-white/5 dark:text-slate-200 dark:hover:bg-white/10 transition">Contact</a>
+      </nav>
+
+      <button id="themeToggle" type="button" aria-label="Toggle theme" class="ml-1 p-2 rounded-full glass hover:scale-105 transition-transform">
+        <i id="themeIcon" class="fa-solid fa-moon text-slate-700 dark:text-slate-200" aria-hidden="true"></i>
+      </button>
+    </div>
+  </header>
+
+  <main id="main" class="max-w-6xl mx-auto px-6 md:px-8 pb-16">
+
+    <!-- Hero -->
+    <section id="top" class="grid md:grid-cols-2 gap-10 items-center focus-scope">
+      <div>
+        <h2 class="text-3xl md:text-5xl font-heading tracking-tight leading-tight">
+          Personal Support Worker <span class="text-brand-700 dark:text-brand-300">Portfolio</span>
+        </h2>
+
+        <p class="mt-3 text-slate-700 dark:text-slate-300 max-w-xl">
+          I’m a PSW student focused on safe, respectful, client-centered support. I bring strong communication, reliability, and a disciplined approach to documentation from my software development background.
+        </p>
+
+        <div class="mt-5 flex flex-wrap gap-3 items-center">
+          <a href="#certificates" class="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-gradient-to-r from-cyan-400 to-violet-600 text-[#021126] font-semibold shadow-lg transform hover:scale-[1.03] transition">
+            View certificates <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+          </a>
+          <a href="#timeline" class="inline-flex items-center gap-2 px-4 py-2 rounded-md border border-black/10 text-slate-800 hover:bg-black/5 dark:border-white/10 dark:text-slate-200 dark:hover:bg-white/10 transition">
+            View placements
+          </a>
+        </div>
+
+        <!-- Stats / counters -->
+        <div class="mt-7 grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <div class="p-4 rounded-2xl glass card-border">
+            <div class="text-2xl font-heading" data-counter data-target="4">0</div>
+            <div class="text-xs text-slate-600 dark:text-slate-300">Certificates</div>
+          </div>
+          <div class="p-4 rounded-2xl glass card-border">
+            <div class="text-2xl font-heading" data-counter data-target="2">0</div>
+            <div class="text-xs text-slate-600 dark:text-slate-300">Placements</div>
+          </div>
+          <div class="p-4 rounded-2xl glass card-border">
+            <div class="text-2xl font-heading" data-counter data-target="2">0</div>
+            <div class="text-xs text-slate-600 dark:text-slate-300">Languages</div>
+          </div>
+          <div class="p-4 rounded-2xl glass card-border">
+            <div class="text-2xl font-heading" data-counter data-target="2026">0</div>
+            <div class="text-xs text-slate-600 dark:text-slate-300">Updated</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: At-a-glance card -->
+      <aside class="relative">
+        <div class="rounded-2xl overflow-hidden shadow-fancy glass p-6 card-border">
+          <div class="flex items-start gap-4">
+            <div class="w-16 h-16 rounded-xl bg-gradient-to-br from-cyan-400 to-violet-600 flex items-center justify-center text-[#021126] font-heading text-xl animate-floaty">
+              <i class="fa-solid fa-hand-holding-heart" aria-hidden="true"></i>
+            </div>
+            <div>
+              <div class="text-sm text-slate-700 dark:text-slate-300">Program</div>
+              <div class="text-lg font-semibold mt-1">Personal Support Worker (PSW)</div>
+              <div class="text-xs text-slate-600 dark:text-slate-400 mt-2">
+                Sep 2025 – Apr 2026 (expected)
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-6">
+            <div class="text-sm text-slate-700 dark:text-slate-300">Strengths</div>
+            <div class="mt-3 grid grid-cols-2 gap-2 text-xs">
+              <div class="chip">Client-centered care</div>
+              <div class="chip">Safety & hygiene</div>
+              <div class="chip">Clear communication</div>
+              <div class="chip">Documentation discipline</div>
+            </div>
+          </div>
+
+          <div class="mt-6">
+            <div class="text-sm text-slate-700 dark:text-slate-300">Languages</div>
+            <div class="mt-2 flex flex-wrap gap-2 text-xs">
+              <span class="pill"><i class="fa-solid fa-language" aria-hidden="true"></i> English</span>
+              <span class="pill">French (Intermediate)</span>
+              <span class="pill">Chinese (Intermediate)</span>
+            </div>
+          </div>
+
+          <div class="mt-6 text-xs text-slate-600 dark:text-slate-400">
+            Previous education: AEC in Software Development (completed Aug 2025).
+          </div>
+        </div>
+
+        <div class="absolute -right-4 -bottom-5 w-28 h-28 rounded-full bg-white/60 dark:bg-white/5 border border-black/10 dark:border-white/10 flex items-center justify-center text-xs text-slate-800 dark:text-slate-100 shadow-glow">
+          <div class="text-center">
+            <div class="font-heading text-sm">Open to</div>
+            <div class="text-[11px] mt-1">Placements & entry roles</div>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <!-- About --->
+    <section id="about" class="mt-14">
+      <div class="glass p-6 rounded-2xl card-border">
+        <h2 class="text-2xl font-heading">About</h2>
+        <p class="mt-3 text-slate-700 dark:text-slate-300 max-w-4xl">
+          I’m transitioning from software development to healthcare support. I value empathy, safety, privacy, and communication—while using the same mindset that helped me succeed in tech: preparation, consistency, and attention to detail.
+        </p>
+
+        <div class="mt-6 grid md:grid-cols-3 gap-6">
+          <div class="p-4 bg-black/5 dark:bg-white/5 rounded-lg">
+            <h3 class="font-semibold">What I focus on</h3>
+            <ul class="mt-2 text-sm text-slate-700 dark:text-slate-300 space-y-1">
+              <li>Respectful support with activities of daily living</li>
+              <li>Safe, clean care routines and infection prevention</li>
+              <li>Clear communication with clients and teams</li>
+            </ul>
+          </div>
+
+          <div class="p-4 bg-black/5 dark:bg-white/5 rounded-lg">
+            <h3 class="font-semibold">What I’m building</h3>
+            <ul class="mt-2 text-sm text-slate-700 dark:text-slate-300 space-y-1">
+              <li>Hands-on placement experience</li>
+              <li>Stronger clinical confidence and teamwork</li>
+              <li>Professional portfolio of certificates and training</li>
+            </ul>
+          </div>
+
+          <div class="p-4 bg-black/5 dark:bg-white/5 rounded-lg">
+            <h3 class="font-semibold">Background</h3>
+            <p class="mt-2 text-sm text-slate-700 dark:text-slate-300">
+              AEC in Software Development: Secure Desktop, Mobile and Web Applications (Sep 2023 – Aug 2025).
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Certificates -->
+    <section id="certificates" class="mt-14">
+      <div class="flex items-end justify-between gap-6 flex-wrap">
+        <div>
+          <h2 class="text-2xl font-heading">Certificates</h2>
+          <p class="mt-2 text-slate-700 dark:text-slate-300 max-w-3xl">
+            Upload the PDF files into <span class="font-mono">assets/certificates/</span> using the exact filenames shown.
+            Buttons will automatically enable when the files exist.
+          </p>
+        </div>
+      </div>
+
+      <div class="mt-6 grid md:grid-cols-2 gap-6">
+
+        <!-- Mask Fit -->
+        <article class="p-5 rounded-2xl glass card-border hover:shadow-glow transition" data-cert data-cert-file="assets/certificates/MaskFit-Certificate.pdf">
+          <div class="flex items-start gap-4">
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-400 to-violet-600 flex items-center justify-center text-[#021126] shadow-lg">
+              <i class="fa-solid fa-mask-face" aria-hidden="true"></i>
+            </div>
+            <div class="min-w-0">
+              <h3 class="font-heading text-lg leading-tight">Mask Fit Certificate</h3>
+              <p class="text-sm text-slate-700 dark:text-slate-300 mt-1">
+                Respiratory protection / mask fit training documentation.
+              </p>
+              <p class="cert-status" data-role="status">PDF placeholder (upload to enable).</p>
+            </div>
+          </div>
+
+          <div class="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <a
+              class="btn-primary"
+              href="assets/certificates/Mask Fit Certificate- Sajjan Gautam.pdf"
+              download="MaskFit-Certificate.pdf"
+              data-role="download"
+              aria-label="Download Mask Fit Certificate PDF"
+            >
+              <i class="fa-solid fa-download" aria-hidden="true"></i>
+              Download PDF
+            </a>
+
+            <a
+              class="btn-secondary"
+              href="assets/certificates/Mask Fit Certificate- Sajjan Gautam.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              data-role="preview"
+              aria-label="Open Mask Fit Certificate PDF in a new tab"
+            >
+              <i class="fa-regular fa-eye" aria-hidden="true"></i>
+              Open / Preview
+            </a>
+          </div>
+        </article>
+
+        <!-- CPR BLS + Standard First Aid -->
+        <article class="p-5 rounded-2xl glass card-border hover:shadow-glow transition" data-cert data-cert-file="assets/certificates/CPR-BLS-Standard-First-Aid.pdf">
+          <div class="flex items-start gap-4">
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-400 to-violet-600 flex items-center justify-center text-[#021126] shadow-lg">
+              <i class="fa-solid fa-heart-pulse" aria-hidden="true"></i>
+            </div>
+            <div class="min-w-0">
+              <h3 class="font-heading text-lg leading-tight">CPR BLS & Standard First Aid</h3>
+              <p class="text-sm text-slate-700 dark:text-slate-300 mt-1">
+                CPR and emergency response certification (PDF record).
+              </p>
+              <p class="cert-status" data-role="status">PDF placeholder (upload to enable).</p>
+            </div>
+          </div>
+
+          <div class="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <a
+              class="btn-primary"
+              href="assets/certificates/Standard First Aid & CPR (BLS) Certificate - Sajjan Gautam.pdf"
+              download="CPR-BLS-Standard-First-Aid.pdf"
+              data-role="download"
+              aria-label="Download CPR BLS and Standard First Aid Certificate PDF"
+            >
+              <i class="fa-solid fa-download" aria-hidden="true"></i>
+              Download PDF
+            </a>
+
+            <a
+              class="btn-secondary"
+              href="assets/certificates/Standard First Aid & CPR (BLS) Certificate - Sajjan Gautam.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              data-role="preview"
+              aria-label="Open CPR BLS and Standard First Aid Certificate PDF in a new tab"
+            >
+              <i class="fa-regular fa-eye" aria-hidden="true"></i>
+              Open / Preview
+            </a>
+          </div>
+        </article>
+
+        <!-- Food Handling -->
+        <article class="p-5 rounded-2xl glass card-border hover:shadow-glow transition" data-cert data-cert-file="assets/certificates/Food-Handling-Certificate.pdf">
+          <div class="flex items-start gap-4">
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-400 to-violet-600 flex items-center justify-center text-[#021126] shadow-lg">
+              <i class="fa-solid fa-utensils" aria-hidden="true"></i>
+            </div>
+            <div class="min-w-0">
+              <h3 class="font-heading text-lg leading-tight">Food Handling Certificate</h3>
+              <p class="text-sm text-slate-700 dark:text-slate-300 mt-1">
+                Food safety / hygiene training certificate.
+              </p>
+              <p class="cert-status" data-role="status">PDF placeholder (upload to enable).</p>
+            </div>
+          </div>
+
+          <div class="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <a
+              class="btn-primary"
+              href="assets/certificates/Food Handler Certification.pdf"
+              download="Food-Handling-Certificate.pdf"
+              data-role="download"
+              aria-label="Download Food Handling Certificate PDF"
+            >
+              <i class="fa-solid fa-download" aria-hidden="true"></i>
+              Download PDF
+            </a>
+
+            <a
+              class="btn-secondary"
+              href="assets/certificates/Food Handler Certification.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              data-role="preview"
+              aria-label="Open Food Handling Certificate PDF in a new tab"
+            >
+              <i class="fa-regular fa-eye" aria-hidden="true"></i>
+              Open / Preview
+            </a>
+          </div>
+        </article>
+
+        <!-- Dementia -->
+        <article class="p-5 rounded-2xl glass card-border hover:shadow-glow transition" data-cert data-cert-file="assets/certificates/Dementia-Course-Certificate.pdf">
+          <div class="flex items-start gap-4">
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-400 to-violet-600 flex items-center justify-center text-[#021126] shadow-lg">
+              <i class="fa-solid fa-brain" aria-hidden="true"></i>
+            </div>
+            <div class="min-w-0">
+              <h3 class="font-heading text-lg leading-tight">Dementia Course Certificate</h3>
+              <p class="text-sm text-slate-700 dark:text-slate-300 mt-1">
+                Dementia care fundamentals certificate.
+              </p>
+              <p class="cert-status" data-role="status">PDF placeholder (upload to enable).</p>
+            </div>
+          </div>
+
+          <div class="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <a
+              class="btn-primary"
+              href="assets/certificates/Dementia-Course-Certificate.pdf"
+              download="Dementia-Course-Certificate.pdf"
+              data-role="download"
+              aria-label="Download Dementia Course Certificate PDF"
+            >
+              <i class="fa-solid fa-download" aria-hidden="true"></i>
+              Download PDF
+            </a>
+
+            <a
+              class="btn-secondary"
+              href="assets/certificates/Dementia-Course-Certificate.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              data-role="preview"
+              aria-label="Open Dementia Course Certificate PDF in a new tab"
+            >
+              <i class="fa-regular fa-eye" aria-hidden="true"></i>
+              Open / Preview
+            </a>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- Skills -->
+    <section id="skills" class="mt-14">
+      <h2 class="text-2xl font-heading">Skills and languages</h2>
+
+      <div class="mt-6 grid md:grid-cols-2 gap-6">
+        <div class="glass p-6 rounded-2xl card-border">
+          <h3 class="text-lg font-semibold">PSW / healthcare support skills</h3>
+          <p class="mt-2 text-sm text-slate-700 dark:text-slate-300">
+            (Customize this list based on your program competencies and placement experience.)
+          </p>
+
+          <ul class="mt-4 space-y-2 text-sm text-slate-700 dark:text-slate-300 list-disc pl-5">
+            <li>Client-centered communication and respectful support</li>
+            <li>Hygiene, infection prevention, and safe routines</li>
+            <li>Team collaboration and clear handoffs</li>
+            <li>Professional documentation habits and reliability</li>
+          </ul>
+        </div>
+
+        <div class="glass p-6 rounded-2xl card-border">
+          <h3 class="text-lg font-semibold">Languages</h3>
+          <div class="mt-4 grid gap-3 text-sm">
+            <div class="flex items-center justify-between bg-black/5 dark:bg-white/5 rounded-lg p-3">
+              <span>French</span>
+              <span class="text-slate-600 dark:text-slate-300">Intermediate</span>
+            </div>
+            <div class="flex items-center justify-between bg-black/5 dark:bg-white/5 rounded-lg p-3">
+              <span>Chinese</span>
+              <span class="text-slate-600 dark:text-slate-300">Intermediate</span>
+            </div>
+
+            <div class="mt-2 text-xs text-slate-600 dark:text-slate-400">
+              Tip: add English (or other languages) here if you want them listed explicitly.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Timeline -->
+    <section id="timeline" class="mt-14">
+      <h2 class="text-2xl font-heading">Education, placements, and volunteering</h2>
+
+      <div class="mt-6 grid lg:grid-cols-2 gap-6">
+
+        <div class="glass p-6 rounded-2xl card-border">
+          <h3 class="text-lg font-semibold">Education</h3>
+
+          <ol class="mt-4 space-y-4">
+            <li class="timeline-item">
+              <div class="timeline-dot" aria-hidden="true"></div>
+              <div>
+                <div class="font-semibold">AEC in Software Development</div>
+                <div class="text-xs text-slate-700 dark:text-slate-300">Secure Desktop, Mobile and Web Applications</div>
+                <div class="text-xs text-slate-600 dark:text-slate-400 mt-1">Sep 2023 – Aug 2025 (completed)</div>
+              </div>
+            </li>
+
+            <li class="timeline-item">
+              <div class="timeline-dot" aria-hidden="true"></div>
+              <div>
+                <div class="font-semibold">Personal Support Worker (PSW)</div>
+                <div class="text-xs text-slate-700 dark:text-slate-300">Program in progress</div>
+                <div class="text-xs text-slate-600 dark:text-slate-400 mt-1">Sep 2025 – Apr 2026 (expected)</div>
+              </div>
+            </li>
+          </ol>
+        </div>
+
+        <div class="glass p-6 rounded-2xl card-border">
+          <h3 class="text-lg font-semibold">Placements and service</h3>
+
+          <ol class="mt-4 space-y-4">
+            <li class="timeline-item">
+              <div class="timeline-dot" aria-hidden="true"></div>
+              <div>
+                <div class="font-semibold">Clinical Placement — Centenary Hospital</div>
+                <div class="text-xs text-slate-600 dark:text-slate-400 mt-1">Jan 2026 – Mar 2026</div>
+                <p class="text-sm text-slate-700 dark:text-slate-300 mt-2">
+                  Hands-on clinical experience as part of PSW training (details customizable).
+                </p>
+              </div>
+            </li>
+
+            <li class="timeline-item">
+              <div class="timeline-dot" aria-hidden="true"></div>
+              <div>
+                <div class="font-semibold">Community Placement — Seven Oaks (City of Toronto)</div>
+                <div class="text-xs text-slate-600 dark:text-slate-400 mt-1">Mar 2026 – Apr 2026 (expected)</div>
+                <p class="text-sm text-slate-700 dark:text-slate-300 mt-2">
+                  Community placement experience supporting long-term care environment (details customizable).
+                </p>
+              </div>
+            </li>
+
+            <li class="timeline-item">
+              <div class="timeline-dot" aria-hidden="true"></div>
+              <div>
+                <div class="font-semibold">Volunteer — Vanier Student Association (Montreal community service)</div>
+                <div class="text-xs text-slate-600 dark:text-slate-400 mt-1">Dates: add if you want</div>
+                <p class="text-sm text-slate-700 dark:text-slate-300 mt-2">
+                  Volunteer program participation supporting student/community initiatives.
+                </p>
+              </div>
+            </li>
+          </ol>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="mt-14 mb-24 grid md:grid-cols-2 gap-8">
+      <div class="glass p-6 rounded-2xl card-border">
+        <h2 class="text-2xl font-heading">Contact</h2>
+        <p class="mt-2 text-slate-700 dark:text-slate-300">
+          Replace the placeholders below with your preferred public contact details.
+        </p>
+
+        <form action="mailto:your.email@example.com" method="post" enctype="text/plain" class="mt-4 space-y-3">
+          <label class="block">
+            <span class="sr-only">Your name</span>
+            <input name="name" placeholder="Your name" class="w-full p-3 rounded bg-transparent border border-black/10 dark:border-white/10 text-slate-900 dark:text-slate-100 focus-ring" required>
+          </label>
+
+          <label class="block">
+            <span class="sr-only">Your email</span>
+            <input name="email" placeholder="Your email" class="w-full p-3 rounded bg-transparent border border-black/10 dark:border-white/10 text-slate-900 dark:text-slate-100 focus-ring" required>
+          </label>
+
+          <label class="block">
+            <span class="sr-only">Message</span>
+            <textarea name="message" placeholder="Message" rows="5" class="w-full p-3 rounded bg-transparent border border-black/10 dark:border-white/10 text-slate-900 dark:text-slate-100 focus-ring" required></textarea>
+          </label>
+
+          <div class="flex flex-wrap gap-3">
+            <button type="submit" class="px-4 py-2 rounded-md bg-gradient-to-r from-cyan-400 to-violet-600 text-[#021126] font-semibold hover:shadow-glow transition">
+              Send
+            </button>
+
+            <a class="px-4 py-2 rounded-md border border-black/10 dark:border-white/10 hover:bg-black/5 dark:hover:bg-white/10 transition"
+               href="https://formspree.io/f/your-id"
+               target="_blank" rel="noopener noreferrer">
+              Use Formspree
+            </a>
+          </div>
+        </form>
+      </div>
+
+      <aside class="p-6 rounded-2xl glass card-border">
+        <h3 class="text-lg font-semibold">Quick contact</h3>
+        <div class="mt-3 text-sm text-slate-700 dark:text-slate-300 space-y-2">
+          <div><strong>Email:</strong> <a class="text-brand-700 dark:text-brand-300" href="mailto:your.email@example.com">your.email@example.com</a></div>
+          <div><strong>Phone:</strong> +1 (000) 000-0000</div>
+          <div><strong>Location:</strong> Toronto, ON, Canada</div>
+          <div>
+            <strong>LinkedIn:</strong>
+            <a class="text-brand-700 dark:text-brand-300"
+               href="https://www.linkedin.com/in/your-handle"
+               target="_blank" rel="noopener noreferrer">linkedin.com/in/your-handle</a>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <footer class="max-w-6xl mx-auto py-6 text-center text-slate-600 dark:text-slate-400">
+      <div class="flex items-center justify-center gap-4 text-lg">
+        <a href="https://www.linkedin.com/in/your-handle" target="_blank" rel="noopener noreferrer"
+           class="hover:text-brand-700 dark:hover:text-brand-300 transition" aria-label="Open LinkedIn profile">
+          <i class="fab fa-linkedin" aria-hidden="true"></i>
+        </a>
+        <a href="#certificates"
+           class="hover:text-brand-700 dark:hover:text-brand-300 transition" aria-label="Jump to Certificates">
+          <i class="fa-solid fa-certificate" aria-hidden="true"></i>
+        </a>
+      </div>
+      <div class="mt-3 text-xs">© <span id="year"></span> Sajjan Gautam — PSW Portfolio</div>
+    </footer>
+
+  </main>
+
+  <!-- Back to top -->
+  <button id="backToTop" aria-label="Back to top"
+          class="fixed right-6 bottom-6 p-3 rounded-full bg-gradient-to-r from-cyan-400 to-violet-600 text-[#021126] shadow-lg hidden">
+    ↑
+  </button>
+
+  <!-- Toast / status messages -->
+  <div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- Local JS -->
+  <script src="assets/scripts.js" defer></script>
+</body>
+</html>
