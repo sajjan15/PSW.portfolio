@@ -201,4 +201,4 @@ Live Website
 
 Click the link below to view the portfolio page
 
-https://sajjan15.github.io/PSW.portfolio./
+https://sajjan15.github.io/PSW.portfolio/
