@@ -1,32 +1,71 @@
-PSW Portfolio – Sajjan Gautam
+🏥 Personal Support Worker (PSW) Portfolio
+Sajjan Gautam
 
-This repository contains my Personal Support Worker (PSW) professional portfolio website hosted on GitHub Pages.
 
-The website acts as a digital resume and professional profile designed for healthcare employers, showcasing:
 
-Education
 
-Clinical placements
 
-Certifications
 
-Volunteer experience
 
-Language skills
 
-Contact information
+🌐 Live Portfolio
+View the website
 
-The goal of this portfolio is to present my training, certifications, and clinical experience in a clean and professional way suitable for healthcare organizations.
+➡️ https://sajjan15.github.io/PSW.portfolio/
+
+This website serves as my Personal Support Worker digital portfolio, presenting my:
+
+healthcare training
+
+clinical placements
+
+certifications
+
+volunteer experience
+
+professional skills
+
+The goal is to provide a clean, professional profile for healthcare employers and organizations.
+
+📑 Table of Contents
 
 About Me
 
-I am currently completing the Personal Support Worker (PSW) program and have clinical experience in hospital and long-term care environments.
-
-I previously completed an AEC in Software Development, which allows me to design and maintain professional digital portfolios like this one.
-
-My focus is providing safe, compassionate, and person-centered care to clients in hospital, long-term care, and community settings.
-
 Education
+
+Clinical Placements
+
+Volunteer Experience
+
+Certifications
+
+Languages
+
+Website Technology
+
+Project Structure
+
+Deployment
+
+Contact
+
+👤 About Me
+
+I am currently completing the Personal Support Worker (PSW) program and gaining clinical experience in hospital and long-term care environments.
+
+My focus is providing:
+
+safe care
+
+compassionate support
+
+person-centered assistance
+
+to clients in hospital, long-term care, and community healthcare settings.
+
+Before entering healthcare, I completed an AEC in Software Development, which allows me to design and maintain professional digital portfolios like this one.
+
+🎓 Education
 Personal Support Worker (PSW)
 
 Sep 2025 – Apr 2026 (Expected)
@@ -46,15 +85,17 @@ Documentation and client safety
 AEC in Software Development
 
 Secure Desktop, Mobile and Web Applications
+
 Sep 2023 – Aug 2025
 
 Vanier College – Montreal
 
-Clinical Placements
+🏥 Clinical Placements
 Clinical Placement
 
 Centenary Hospital
-Jan 2026 – March 2026
+
+Jan 2026 – Mar 2026
 
 Experience includes:
 
@@ -69,7 +110,8 @@ Maintaining patient safety and comfort
 Community Placement
 
 Seven Oaks Long-Term Care – City of Toronto
-March 2026 – April 2026 (Expected)
+
+Mar 2026 – Apr 2026 (Expected)
 
 Experience includes:
 
@@ -81,7 +123,7 @@ Monitoring client wellbeing
 
 Working with multidisciplinary care teams
 
-Volunteer Experience
+🤝 Volunteer Experience
 Vanier Student Association
 
 Montreal Community Service Volunteer Program
@@ -94,7 +136,7 @@ Supporting local initiatives
 
 Assisting with student and community events
 
-Certifications
+📜 Certifications
 
 The portfolio includes downloadable copies of the following certifications:
 
@@ -106,7 +148,7 @@ Food Handling Certificate
 
 Dementia Care Certificate
 
-Certificates are stored in:
+Certificates are stored inside:
 
 assets/certificates/
 
@@ -121,17 +163,17 @@ assets/
 
 Each certificate appears on the website with a Download Certificate button.
 
-Languages
+🌎 Languages
 
-English
+English — Fluent
 
-French (Intermediate)
+French — Intermediate
 
-Chinese (Intermediate)
+Chinese — Intermediate
 
-Website Technology
+💻 Website Technology
 
-The website is built using:
+This portfolio website is built using:
 
 HTML5
 
@@ -139,15 +181,23 @@ TailwindCSS
 
 JavaScript
 
-FontAwesome Icons
+Font Awesome Icons
 
-Responsive Design
+Responsive Web Design
 
 GitHub Pages Hosting
 
-The site is lightweight and optimized for fast loading and mobile viewing.
+The site is designed to be:
 
-Project Structure
+lightweight
+
+fast loading
+
+mobile friendly
+
+visually professional
+
+📁 Project Structure
 PSW.portfolio
 │
 ├── index.html
@@ -166,11 +216,11 @@ PSW.portfolio
 │   └── images
 │
 └── favicon.ico
-Deployment
+🚀 Deployment
 
 This site is deployed using GitHub Pages.
 
-Steps used:
+Deployment steps:
 
 Create repository
 
@@ -182,23 +232,20 @@ Deploy from the main branch
 
 GitHub automatically publishes the site.
 
-Contact
+📬 Contact
 
 Sajjan Gautam
-
 Toronto, Ontario, Canada
 
-Email
+📧 Email
 sajjangautam28@gmail.com
 
-GitHub
+💻 GitHub
 https://github.com/sajjan15
 
-LinkedIn
+🔗 LinkedIn
 https://www.linkedin.com/in/sajjan-gautam-68891a19a
 
-Live Website
-
-Click the link below to view the portfolio page
-
-https://sajjan15.github.io/PSW.portfolio/
+🌐 Portfolio Website
+Click the link below to view the portfolio
+➡️ https://sajjan15.github.io/PSW.portfolio/
