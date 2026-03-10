@@ -139,6 +139,70 @@
     });
   }
 
+      // Particle background
+    const particleHost = document.getElementById("particles");
+    if(particleHost){
+
+    const canvas=document.createElement("canvas");
+    particleHost.appendChild(canvas);
+    const ctx=canvas.getContext("2d");
+
+    let w,h,particles=[];
+
+    function resize(){
+    w=canvas.width=window.innerWidth;
+    h=canvas.height=window.innerHeight;
+    }
+    window.addEventListener("resize",resize);
+    resize();
+
+    particles=Array.from({length:60},()=>({
+    x:Math.random()*w,
+    y:Math.random()*h,
+    r:Math.random()*2+1,
+    dx:(Math.random()-.5)*.4,
+    dy:(Math.random()-.5)*.4
+    }));
+
+    function draw(){
+    ctx.clearRect(0,0,w,h);
+
+    particles.forEach(p=>{
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fillStyle="rgba(255,255,255,.35)";
+    ctx.fill();
+
+    p.x+=p.dx;
+    p.y+=p.dy;
+
+    if(p.x<0||p.x>w)p.dx*=-1;
+    if(p.y<0||p.y>h)p.dy*=-1;
+    });
+
+    requestAnimationFrame(draw);
+    }
+    draw();
+    }
+
+    // Scroll animations
+  if(window.gsap){
+  gsap.registerPlugin(ScrollTrigger);
+
+  gsap.utils.toArray("section").forEach(sec=>{
+  gsap.from(sec,{
+  opacity:0,
+  y:40,
+  duration:.8,
+  ease:"power3.out",
+  scrollTrigger:{
+  trigger:sec,
+  start:"top 85%"
+  }
+  });
+  });
+  }
+
   // For each certificate card, disable buttons if the PDF isn't uploaded yet
   const certCards = $$('[data-cert][data-cert-file]');
   certCards.forEach(async (card) => {
