@@ -10,862 +10,21 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" referrerpolicy="no-referrer" />
-    <style>
-    /* ═══════════════════════════════════════════
-    DESIGN TOKENS
-    ═══════════════════════════════════════════ */
-    :root {
-    --cream:    #faf7f2;
-    --cream2:   #f2ede4;
-    --white:    #ffffff;
-    --ink:      #1c1710;
-    --ink2:     #4a4035;
-    --ink3:     #8c7e70;
-    --teal:     #1e6b62;
-    --teal-lt:  #e8f4f2;
-    --teal-mid: #c2deda;
-    --gold:     #b8860b;
-    --gold-lt:  #fdf3d8;
-    --rose:     #9b3a4a;
-    --rose-lt:  #f9eaec;
-    --slate:    #3a4a5c;
-    --slate-lt: #eaeff5;
-    --border:   rgba(28,23,16,0.10);
-    --border2:  rgba(28,23,16,0.18);
-    --shadow-sm: 0 2px 12px rgba(28,23,16,0.06);
-    --shadow-md: 0 8px 32px rgba(28,23,16,0.10);
-    --shadow-lg: 0 20px 60px rgba(28,23,16,0.12);
-    --r:        14px;
-    --r-sm:     8px;
-    --f-display:'Cormorant Garamond', Georgia, serif;
-    --f-body:   'Outfit', system-ui, sans-serif;
-    --f-mono:   'JetBrains Mono', monospace;
-    --ease:     cubic-bezier(0.22,1,0.36,1);
-    --ease-spr: cubic-bezier(0.34,1.56,0.64,1);
-    --nav-h:    62px;
-    }
-
-    [data-theme="dark"] {
-    --cream:    #141210;
-    --cream2:   #1c1916;
-    --white:    #201d19;
-    --ink:      #f0ece4;
-    --ink2:     #b0a898;
-    --ink3:     #6a6058;
-    --teal:     #4db8aa;
-    --teal-lt:  #0e2926;
-    --teal-mid: #1a3d3a;
-    --gold:     #e8b840;
-    --gold-lt:  #2a2210;
-    --rose:     #e07080;
-    --rose-lt:  #2a1018;
-    --slate:    #8ab0d0;
-    --slate-lt: #141e2a;
-    --border:   rgba(240,236,228,0.10);
-    --border2:  rgba(240,236,228,0.18);
-    }
-
-    /* ═══════════════════════════════════════════
-    RESET + BASE
-    ═══════════════════════════════════════════ */
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    html{scroll-behavior:smooth;font-size:16px}
-    body{
-    font-family:var(--f-body);
-    background:var(--cream);
-    color:var(--ink);
-    line-height:1.7;
-    overflow-x:hidden;
-    transition:background 0.35s,color 0.35s;
-    cursor:none;
-    }
-    a{color:inherit;text-decoration:none}
-    img{display:block;max-width:100%}
-    ul,ol{list-style:none}
-    ::selection{background:var(--teal);color:#fff}
-
-    /* ═══════════════════════════════════════════
-    CUSTOM CURSOR
-    ═══════════════════════════════════════════ */
-    #cursor{
-    position:fixed;top:0;left:0;z-index:9999;
-    width:32px;height:32px;border-radius:50%;
-    border:1.5px solid var(--teal);
-    pointer-events:none;
-    transform:translate(-50%,-50%);
-    transition:width 0.22s var(--ease),height 0.22s var(--ease),opacity 0.2s;
-    mix-blend-mode:multiply;
-    }
-    [data-theme="dark"] #cursor{mix-blend-mode:screen}
-    #cursor-inner{
-    position:absolute;top:50%;left:50%;
-    transform:translate(-50%,-50%);
-    width:5px;height:5px;border-radius:50%;
-    background:var(--teal);
-    transition:transform 0.1s;
-    }
-    body.c-hover #cursor{width:52px;height:52px;opacity:0.6}
-    body.c-press #cursor{transform:translate(-50%,-50%) scale(0.82)}
-
-    /* ═══════════════════════════════════════════
-    NOISE + ORBS
-    ═══════════════════════════════════════════ */
-    .noise{
-    position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0.028;
-    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-    background-size:256px;
-    }
-    .orb{position:fixed;border-radius:50%;pointer-events:none;filter:blur(90px);z-index:0;}
-    .orb-1{width:700px;height:700px;top:-250px;left:-200px;background:radial-gradient(circle,rgba(30,107,98,0.12),transparent 70%);animation:orbDrift 20s ease-in-out infinite;}
-    .orb-2{width:500px;height:500px;bottom:0;right:-150px;background:radial-gradient(circle,rgba(184,134,11,0.09),transparent 70%);animation:orbDrift 26s ease-in-out infinite reverse 3s;}
-    .orb-3{width:380px;height:380px;top:50%;left:40%;background:radial-gradient(circle,rgba(30,107,98,0.06),transparent 70%);animation:orbDrift 18s ease-in-out infinite 6s;}
-    @keyframes orbDrift{
-    0%,100%{transform:translate(0,0)}
-    33%{transform:translate(40px,-50px)}
-    66%{transform:translate(-30px,25px)}
-    }
-
-    /* ═══════════════════════════════════════════
-    SKIP LINK
-    ═══════════════════════════════════════════ */
-    .skip-link{
-    position:absolute;left:12px;top:12px;z-index:200;
-    padding:8px 16px;border-radius:6px;
-    background:var(--teal);color:#fff;font-weight:600;font-size:14px;
-    transform:translateY(-150%);transition:transform 0.2s;
-    }
-    .skip-link:focus{transform:translateY(0)}
-
-    /* ═══════════════════════════════════════════
-    NAV
-    ═══════════════════════════════════════════ */
-    .nav{
-    position:sticky;top:0;z-index:100;
-    height:var(--nav-h);
-    display:flex;align-items:center;gap:20px;
-    padding:0 clamp(16px,5vw,56px);
-    background:color-mix(in srgb,var(--cream) 82%,transparent);
-    backdrop-filter:blur(18px) saturate(160%);
-    border-bottom:1px solid var(--border);
-    transition:background 0.3s;
-    }
-    .nav-logo{
-    display:flex;align-items:center;gap:12px;
-    font-weight:600;font-size:15px;color:var(--ink);
-    }
-    .logo-mark{
-    width:38px;height:38px;border-radius:10px;flex-shrink:0;
-    background:var(--teal);color:#fff;
-    display:flex;align-items:center;justify-content:center;
-    font-family:var(--f-display);font-size:15px;letter-spacing:0.03em;
-    transition:transform 0.3s var(--ease-spr);
-    }
-    .logo-mark:hover{transform:scale(1.1) rotate(-4deg)}
-    .nav-links{display:flex;gap:2px;margin-left:auto}
-    .nav-links a{
-    padding:6px 13px;border-radius:99px;
-    font-size:14px;font-weight:500;color:var(--ink2);
-    transition:color 0.2s,background 0.2s;
-    }
-    .nav-links a:hover,.nav-links a.active{color:var(--ink);background:var(--border)}
-    .nav-links a.active{color:var(--teal)}
-    #themeBtn{
-    display:flex;align-items:center;justify-content:center;
-    width:34px;height:34px;border-radius:50%;
-    background:transparent;border:1px solid var(--border2);
-    color:var(--ink2);cursor:none;font-size:13px;
-    transition:background 0.2s,transform 0.3s var(--ease-spr);
-    }
-    #themeBtn:hover{background:var(--border);transform:rotate(20deg)}
-    .nav-mark-badge{
-    display:none;font-size:11px;font-weight:600;color:var(--ink3);line-height:1.2;
-    }
-    @media(min-width:600px){.nav-mark-badge{display:block}}
-
-    /* ═══════════════════════════════════════════
-    COVER / HERO
-    ═══════════════════════════════════════════ */
-    .cover{
-    position:relative;z-index:1;
-    min-height:calc(100svh - var(--nav-h));
-    display:grid;place-items:center;
-    padding:clamp(60px,10vw,120px) clamp(16px,5vw,56px);
-    text-align:center;overflow:hidden;
-    }
-    .cover-inner{max-width:800px}
-    .cover-eyebrow{
-    display:inline-flex;align-items:center;gap:10px;
-    font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;
-    color:var(--ink3);margin-bottom:28px;
-    opacity:0;animation:fadeUp 0.9s 0.1s var(--ease) forwards;
-    }
-    .cover-eyebrow span{
-    padding:4px 14px;border-radius:99px;
-    background:var(--teal-lt);color:var(--teal);
-    border:1px solid var(--teal-mid);
-    }
-    .pulse-dot{
-    width:7px;height:7px;border-radius:50%;background:var(--teal);
-    animation:pulse 2.2s infinite;
-    }
-    @keyframes pulse{
-    0%,100%{box-shadow:0 0 0 0 color-mix(in srgb,var(--teal) 40%,transparent)}
-    50%{box-shadow:0 0 0 7px color-mix(in srgb,var(--teal) 0%,transparent)}
-    }
-    .cover-name{
-    font-family:var(--f-display);
-    font-size:clamp(64px,12vw,140px);
-    font-weight:700;line-height:0.92;letter-spacing:-0.03em;
-    color:var(--ink);
-    opacity:0;animation:fadeUp 0.9s 0.2s var(--ease) forwards;
-    }
-    .cover-name em{color:var(--teal);font-style:italic}
-    .cover-role{
-    display:block;
-    font-family:var(--f-body);font-size:clamp(16px,2.5vw,22px);
-    font-weight:400;color:var(--ink3);letter-spacing:0.02em;margin-top:14px;
-    opacity:0;animation:fadeUp 0.9s 0.38s var(--ease) forwards;
-    }
-    .cover-meta{
-    display:flex;align-items:center;justify-content:center;gap:24px;flex-wrap:wrap;
-    margin-top:32px;font-size:13px;color:var(--ink3);font-weight:500;
-    opacity:0;animation:fadeUp 0.9s 0.5s var(--ease) forwards;
-    }
-    .cover-meta span{display:flex;align-items:center;gap:6px}
-    .cover-meta i{color:var(--teal);font-size:12px}
-    .cover-sep{width:1px;height:14px;background:var(--border2)}
-    .cover-actions{
-    display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:36px;
-    opacity:0;animation:fadeUp 0.9s 0.62s var(--ease) forwards;
-    }
-    .cover-scroll{
-    position:absolute;bottom:32px;left:50%;transform:translateX(-50%);
-    display:flex;flex-direction:column;align-items:center;gap:8px;
-    font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink3);
-    opacity:0;animation:fadeUp 0.9s 1s var(--ease) forwards;
-    }
-    .scroll-line{
-    width:1px;height:40px;background:linear-gradient(to bottom,var(--teal),transparent);
-    animation:scrollLine 1.5s ease-in-out infinite;
-    }
-    @keyframes scrollLine{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform:scaleY(1);transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
-
-    /* Cover score badge */
-    .cover-badge-row{
-    display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:40px;
-    opacity:0;animation:fadeUp 0.9s 0.74s var(--ease) forwards;
-    }
-    .score-badge{
-    display:flex;flex-direction:column;align-items:center;
-    padding:14px 20px;border-radius:var(--r);
-    background:var(--white);border:1px solid var(--border);
-    min-width:90px;
-    transition:transform 0.3s var(--ease-spr),box-shadow 0.3s;
-    }
-    .score-badge:hover{transform:translateY(-4px);box-shadow:var(--shadow-md)}
-    .score-num{
-    font-family:var(--f-mono);font-size:24px;font-weight:600;
-    color:var(--teal);line-height:1;
-    }
-    .score-lbl{font-size:11px;color:var(--ink3);font-weight:500;margin-top:4px;text-align:center}
-
-    /* ═══════════════════════════════════════════
-    MARQUEE
-    ═══════════════════════════════════════════ */
-    .marquee-bar{
-    border-top:1px solid var(--border);border-bottom:1px solid var(--border);
-    overflow:hidden;padding:13px 0;position:relative;z-index:1;
-    }
-    .marquee-bar::before,.marquee-bar::after{
-    content:'';position:absolute;top:0;bottom:0;width:80px;z-index:2;
-    }
-    .marquee-bar::before{left:0;background:linear-gradient(to right,var(--cream),transparent)}
-    .marquee-bar::after{right:0;background:linear-gradient(to left,var(--cream),transparent)}
-    .marquee-inner{
-    display:flex;gap:0;white-space:nowrap;
-    animation:scrollLeft 28s linear infinite;
-    }
-    .marquee-inner:hover{animation-play-state:paused}
-    .marquee-inner span{padding:0 22px;font-size:12px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:0.07em}
-    .marquee-inner .dot-sep{color:var(--teal);padding:0}
-    @keyframes scrollLeft{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-
-    /* ═══════════════════════════════════════════
-    LAYOUT HELPERS
-    ═══════════════════════════════════════════ */
-    .section{
-    position:relative;z-index:1;
-    max-width:1100px;margin:0 auto;
-    padding:clamp(56px,9vw,110px) clamp(16px,5vw,56px);
-    }
-    .section-label{
-    display:inline-flex;align-items:center;gap:8px;
-    font-size:11px;font-weight:700;letter-spacing:0.13em;text-transform:uppercase;
-    color:var(--teal);margin-bottom:14px;
-    }
-    .section-label::before{content:'';width:20px;height:1.5px;background:var(--teal)}
-    .section-heading{
-    font-family:var(--f-display);
-    font-size:clamp(32px,5vw,58px);
-    line-height:1.05;letter-spacing:-0.02em;color:var(--ink);
-    }
-    .section-heading.md{font-size:clamp(26px,3.5vw,42px)}
-    .section-sub{max-width:560px;font-size:16px;color:var(--ink2);margin-top:14px;line-height:1.75}
-    .marks-chip{
-    display:inline-flex;align-items:center;gap:6px;
-    padding:4px 12px;border-radius:99px;
-    font-size:11px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;
-    background:var(--teal-lt);color:var(--teal);border:1px solid var(--teal-mid);
-    margin-left:12px;vertical-align:middle;
-    }
-    .marks-chip i{font-size:10px}
-
-    /* Reveal animation */
-    .reveal{opacity:0;transform:translateY(28px);transition:opacity 0.65s var(--ease),transform 0.65s var(--ease)}
-    .reveal.in{opacity:1;transform:translateY(0)}
-
-    /* Stagger children */
-    .stagger>*{opacity:0;transform:translateY(20px);transition:opacity 0.5s var(--ease),transform 0.5s var(--ease)}
-    .stagger.in>*:nth-child(1){opacity:1;transform:none;transition-delay:0ms}
-    .stagger.in>*:nth-child(2){opacity:1;transform:none;transition-delay:70ms}
-    .stagger.in>*:nth-child(3){opacity:1;transform:none;transition-delay:140ms}
-    .stagger.in>*:nth-child(4){opacity:1;transform:none;transition-delay:210ms}
-    .stagger.in>*:nth-child(5){opacity:1;transform:none;transition-delay:280ms}
-    .stagger.in>*:nth-child(6){opacity:1;transform:none;transition-delay:350ms}
-    .stagger.in>*:nth-child(7){opacity:1;transform:none;transition-delay:420ms}
-    .stagger.in>*:nth-child(8){opacity:1;transform:none;transition-delay:490ms}
-    .stagger.in>*:nth-child(n+9){opacity:1;transform:none;transition-delay:560ms}
-
-    /* Cards */
-    .card{
-    background:var(--white);border:1px solid var(--border);
-    border-radius:var(--r);padding:28px;
-    transition:box-shadow 0.3s,transform 0.3s var(--ease-spr);
-    }
-    .card:hover{box-shadow:var(--shadow-md);transform:translateY(-4px)}
-    .card-dark{background:var(--ink);color:var(--cream)}
-    .card-dark p,.card-dark li{color:var(--cream2)}
-
-    /* Divider */
-    .divider{
-    border:none;border-top:1px solid var(--border);
-    max-width:1100px;margin:0 auto;
-    }
-
-    /* Buttons */
-    .btn{
-    display:inline-flex;align-items:center;gap:8px;
-    padding:11px 22px;border-radius:99px;
-    font-size:14px;font-weight:600;cursor:none;
-    border:none;
-    transition:transform 0.22s var(--ease-spr),box-shadow 0.22s;
-    }
-    .btn:hover{transform:translateY(-2px)}
-    .btn:active{transform:scale(0.96)}
-    .btn-primary{background:var(--teal);color:#fff}
-    .btn-primary:hover{box-shadow:0 8px 28px color-mix(in srgb,var(--teal) 35%,transparent)}
-    .btn-outline{background:transparent;border:1px solid var(--border2);color:var(--ink2)}
-    .btn-outline:hover{background:var(--border);color:var(--ink)}
-    .btn-sm{padding:7px 16px;font-size:13px}
-    .btn-gold{background:var(--gold);color:#fff}
-    .btn-gold:hover{box-shadow:0 8px 28px color-mix(in srgb,var(--gold) 35%,transparent)}
-
-    @keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
-
-    /* ═══════════════════════════════════════════
-    1. STATEMENT OF ORIGINALITY
-    ═══════════════════════════════════════════ */
-    .orig-card{
-    display:flex;gap:20px;align-items:flex-start;
-    background:var(--teal-lt);border:1px solid var(--teal-mid);
-    border-radius:var(--r);padding:28px 32px;
-    }
-    .orig-icon{
-    width:44px;height:44px;border-radius:12px;flex-shrink:0;
-    background:var(--teal);color:#fff;
-    display:flex;align-items:center;justify-content:center;font-size:18px;margin-top:2px;
-    }
-    .orig-card h3{font-family:var(--f-display);font-size:20px;font-weight:600;margin-bottom:8px}
-    .orig-card p{font-size:15px;color:var(--ink2);line-height:1.75}
-
-    /* ═══════════════════════════════════════════
-    2. TABLE OF CONTENTS 
-    ═══════════════════════════════════════════ */
-    .toc-grid{
-    display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-top:28px;
-    }
-    .toc-link{
-    display:flex;align-items:center;gap:14px;
-    padding:14px 18px;border-radius:var(--r-sm);
-    background:var(--white);border:1px solid var(--border);
-    font-size:14px;font-weight:500;color:var(--ink2);
-    transition:border-color 0.2s,color 0.2s,transform 0.2s var(--ease-spr),background 0.2s;
-    }
-    .toc-link:hover{border-color:var(--teal);color:var(--teal);transform:translateX(5px);background:var(--teal-lt)}
-    .toc-num{font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--teal);flex-shrink:0;min-width:24px}
-    .toc-marks{margin-left:auto;font-size:11px;color:var(--ink3);font-weight:600;flex-shrink:0}
-
-    /* ═══════════════════════════════════════════
-    3. WORK PHILOSOPHY 
-    ═══════════════════════════════════════════ */
-    .philosophy-layout{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:28px}
-    .philosophy-quote{
-    padding:32px;border-radius:var(--r);
-    background:var(--ink);color:var(--cream);
-    font-family:var(--f-display);font-size:clamp(20px,2.5vw,28px);
-    font-style:italic;line-height:1.45;letter-spacing:-0.01em;
-    display:flex;flex-direction:column;justify-content:space-between;gap:24px;
-    }
-    .quote-attr{font-family:var(--f-body);font-style:normal;font-size:13px;color:var(--ink3);font-weight:500}
-    .philosophy-values{display:flex;flex-direction:column;gap:14px}
-    .value-item{
-    display:flex;gap:14px;align-items:flex-start;
-    padding:16px;border-radius:var(--r-sm);
-    background:var(--white);border:1px solid var(--border);
-    transition:border-color 0.2s,transform 0.2s;
-    }
-    .value-item:hover{border-color:var(--teal);transform:translateX(4px)}
-    .value-icon{
-    width:36px;height:36px;border-radius:10px;flex-shrink:0;
-    background:var(--teal-lt);color:var(--teal);
-    display:flex;align-items:center;justify-content:center;font-size:14px;
-    }
-    .value-item h4{font-size:14px;font-weight:600;margin-bottom:3px}
-    .value-item p{font-size:13px;color:var(--ink2);line-height:1.55}
-
-    /* ═══════════════════════════════════════════
-    4. CAREER GOALS 
-    ═══════════════════════════════════════════ */
-    .goals-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;margin-top:28px}
-    .goal-card{
-    padding:24px;border-radius:var(--r);
-    background:var(--white);border:1px solid var(--border);
-    transition:transform 0.3s var(--ease-spr),box-shadow 0.3s;
-    }
-    .goal-card:hover{transform:translateY(-6px) rotate(-0.5deg);box-shadow:var(--shadow-md)}
-    .goal-yr{font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--teal);letter-spacing:0.06em;margin-bottom:10px}
-    .goal-card h4{font-size:16px;font-weight:600;margin-bottom:8px}
-    .goal-card p{font-size:14px;color:var(--ink2);line-height:1.6}
-    .goals-paragraph{
-    margin-top:24px;padding:24px 28px;border-radius:var(--r);
-    background:var(--gold-lt);border:1px solid color-mix(in srgb,var(--gold) 20%,transparent);
-    font-size:15px;color:var(--ink2);line-height:1.75;
-    }
-
-    /* ═══════════════════════════════════════════
-    5. RESUME & COVER LETTER 
-    ═══════════════════════════════════════════ */
-    .doc-list{display:flex;flex-direction:column;gap:12px;margin-top:24px}
-    .doc-item{
-    display:flex;align-items:center;gap:16px;
-    padding:18px 22px;border-radius:var(--r-sm);
-    background:var(--white);border:1px solid var(--border);
-    transition:box-shadow 0.2s,transform 0.2s var(--ease-spr);
-    }
-    .doc-item:hover{box-shadow:var(--shadow-sm);transform:translateY(-2px)}
-    .doc-icon{font-size:24px;color:var(--ink3);flex-shrink:0;width:32px;text-align:center}
-    .doc-info{flex:1}
-    .doc-title{font-size:15px;font-weight:600}
-    .doc-desc{font-size:13px;color:var(--ink3);margin-top:2px}
-
-    /* ═══════════════════════════════════════════
-    6. WORK SAMPLES 
-    ═══════════════════════════════════════════ */
-    .samples-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;margin-top:24px}
-    .sample-card{
-    padding:26px;border-radius:var(--r);
-    background:var(--white);border:1px solid var(--border);
-    display:flex;flex-direction:column;gap:10px;
-    transition:transform 0.3s var(--ease-spr),box-shadow 0.3s;
-    }
-    .sample-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-md)}
-    .sample-n{font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--ink3)}
-    .sample-name{font-size:17px;font-weight:700;flex:1}
-    .sample-desc{font-size:13px;color:var(--ink2);line-height:1.55}
-
-    /* ═══════════════════════════════════════════
-    7. CERTIFICATES 
-    ═══════════════════════════════════════════ */
-    .cert-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:18px;margin-top:28px}
-    .cert-card{
-    border-radius:var(--r);background:var(--white);border:1px solid var(--border);
-    padding:24px;display:flex;flex-direction:column;gap:0;
-    position:relative;overflow:hidden;
-    transition:transform 0.3s var(--ease-spr),box-shadow 0.3s,border-color 0.3s;
-    }
-    .cert-card::after{
-    content:'';position:absolute;top:0;left:0;right:0;height:3px;
-    background:var(--teal);transform:scaleX(0);transform-origin:left;
-    transition:transform 0.35s var(--ease);
-    }
-    .cert-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg);border-color:var(--teal-mid)}
-    .cert-card:hover::after{transform:scaleX(1)}
-    .cert-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px}
-    .cert-ico{
-    width:44px;height:44px;border-radius:12px;
-    display:flex;align-items:center;justify-content:center;font-size:18px;
-    transition:transform 0.3s var(--ease-spr);
-    }
-    .cert-card:hover .cert-ico{transform:scale(1.1) rotate(-6deg)}
-    .ico-teal{background:var(--teal-lt);color:var(--teal)}
-    .ico-rose{background:var(--rose-lt);color:var(--rose)}
-    .ico-gold{background:var(--gold-lt);color:var(--gold)}
-    .ico-slate{background:var(--slate-lt);color:var(--slate)}
-    .cert-badge{
-    font-size:10px;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;
-    padding:3px 10px;border-radius:99px;
-    }
-    .b-teal{background:var(--teal-lt);color:var(--teal)}
-    .b-rose{background:var(--rose-lt);color:var(--rose)}
-    .b-gold{background:var(--gold-lt);color:var(--gold)}
-    .b-slate{background:var(--slate-lt);color:var(--slate)}
-    .cert-name{font-size:18px;font-weight:700;line-height:1.2;margin-bottom:8px}
-    .cert-desc{font-size:13px;color:var(--ink2);line-height:1.6;flex:1;margin-bottom:10px}
-    .cert-status{font-size:11px;color:var(--ink3);font-family:var(--f-mono);margin-bottom:16px}
-    .cert-actions{display:flex;gap:8px}
-    .cert-actions .btn{flex:1;justify-content:center;font-size:12px;padding:8px 12px}
-    .is-disabled{opacity:0.4;pointer-events:none;cursor:not-allowed}
-
-    /* ═══════════════════════════════════════════
-    8. ACADEMIC PLAN OF STUDY 
-    ═══════════════════════════════════════════ */
-    .semester-block{margin-bottom:36px}
-    .semester-title{
-    display:flex;align-items:center;gap:12px;
-    font-size:13px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;
-    color:var(--teal);margin-bottom:16px;padding-bottom:10px;
-    border-bottom:1px solid var(--border);
-    }
-    .semester-title span{
-    padding:3px 12px;border-radius:99px;
-    background:var(--teal-lt);color:var(--teal);
-    }
-    .course-table{width:100%;border-collapse:collapse}
-    .course-table th{
-    text-align:left;padding:10px 14px;
-    font-size:11px;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;color:var(--ink3);
-    background:var(--cream2);border-bottom:1px solid var(--border);
-    }
-    .course-table th:first-child{border-radius:8px 0 0 0}
-    .course-table th:last-child{border-radius:0 8px 0 0}
-    .course-table td{
-    padding:12px 14px;font-size:14px;border-bottom:1px solid var(--border);
-    vertical-align:top;color:var(--ink2);
-    }
-    .course-table tr:last-child td{border-bottom:none}
-    .course-table tr:hover td{background:var(--teal-lt)}
-    .course-code{font-family:var(--f-mono);font-size:12px;font-weight:600;color:var(--teal);white-space:nowrap}
-    .course-name{font-weight:600;color:var(--ink)}
-    .course-desc{font-size:13px;color:var(--ink3);margin-top:3px;line-height:1.5}
-
-    /* ═══════════════════════════════════════════
-    9. REFERENCES 
-    ═══════════════════════════════════════════ */
-    .refs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-top:24px}
-    .ref-card{
-    padding:24px;border-radius:var(--r);
-    background:var(--white);border:1px solid var(--border);
-    transition:transform 0.3s var(--ease-spr),box-shadow 0.3s;
-    }
-    .ref-card:hover{transform:translateY(-5px);box-shadow:var(--shadow-md)}
-    .ref-header{display:flex;align-items:center;gap:14px;margin-bottom:16px}
-    .ref-avatar{
-    width:48px;height:48px;border-radius:14px;flex-shrink:0;
-    background:var(--teal);color:#fff;
-    display:flex;align-items:center;justify-content:center;
-    font-family:var(--f-display);font-size:17px;
-    }
-    .ref-name{font-size:16px;font-weight:700}
-    .ref-title{font-size:13px;color:var(--ink3);margin-top:2px}
-    .ref-rows{display:flex;flex-direction:column;gap:0}
-    .ref-row{display:flex;gap:10px;align-items:flex-start;padding:7px 0;border-top:1px solid var(--border);font-size:13px}
-    .ref-row:first-child{border-top:none}
-    .ref-row i{color:var(--teal);font-size:12px;margin-top:2px;flex-shrink:0}
-    .ref-row a{color:var(--teal)}
-    .ref-row a:hover{text-decoration:underline}
-    .ref-relation{
-    display:inline-block;margin-bottom:10px;
-    padding:3px 10px;border-radius:99px;font-size:11px;font-weight:700;
-    background:var(--gold-lt);color:var(--gold);
-    border:1px solid color-mix(in srgb,var(--gold) 20%,transparent);
-    }
-
-    /* ═══════════════════════════════════════════
-    10. GLOBAL CITIZENSHIP 
-    ═══════════════════════════════════════════ */
-    .global-layout{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:28px}
-    .global-main{
-    background:var(--white);border:1px solid var(--border);
-    border-radius:var(--r);padding:28px;
-    }
-    .global-sidebar{display:flex;flex-direction:column;gap:14px}
-    .global-stat{
-    padding:20px;border-radius:var(--r-sm);
-    background:var(--white);border:1px solid var(--border);
-    display:flex;align-items:center;gap:14px;
-    transition:transform 0.2s,border-color 0.2s;
-    }
-    .global-stat:hover{transform:translateX(4px);border-color:var(--teal)}
-    .gs-icon{
-    width:40px;height:40px;border-radius:10px;flex-shrink:0;
-    background:var(--teal-lt);color:var(--teal);
-    display:flex;align-items:center;justify-content:center;font-size:16px;
-    }
-    .gs-label{font-size:12px;font-weight:600;color:var(--ink3);margin-bottom:2px}
-    .gs-val{font-size:15px;font-weight:600}
-    .global-main h4{font-size:17px;font-weight:700;margin-bottom:12px}
-    .global-main p{font-size:14px;color:var(--ink2);line-height:1.75;margin-bottom:10px}
-
-        /* ═══════════════════════════════════════════
-    TIMELINE — left/right alternating
-    ═══════════════════════════════════════════ */
-    .timeline{
-    position:relative;margin-top:56px;
-    display:flex;flex-direction:column;gap:48px;
-    }
-    .timeline::before{
-    content:'';position:absolute;left:50%;top:0;bottom:0;
-    width:1.5px;background:linear-gradient(to bottom,var(--teal),var(--border));
-    transform:translateX(-50%);
-    }
-    .tl-entry{
-    display:grid;grid-template-columns:1fr 1fr;gap:40px;
-    align-items:start;position:relative;
-    }
-    /* dot centred on the line */
-    .tl-entry::after{
-    content:'';position:absolute;left:50%;top:18px;
-    width:14px;height:14px;border-radius:50%;
-    background:var(--teal);border:3px solid var(--cream);
-    transform:translateX(-50%);
-    transition:transform 0.3s var(--ease-spr),box-shadow 0.3s;
-    }
-    .tl-entry:hover::after{
-    transform:translateX(-50%) scale(1.5);
-    box-shadow:0 0 0 5px color-mix(in srgb,var(--teal) 18%,transparent);
-    }
-    /* odd entries: card left, date right */
-    .tl-entry:nth-child(odd) .tl-card-small{ grid-column:1; grid-row:1; }
-    .tl-entry:nth-child(odd) .tl-meta      { grid-column:2; grid-row:1; padding-top:20px; }
-    /* even entries: date left, card right */
-    .tl-entry:nth-child(even) .tl-meta     { grid-column:1; grid-row:1; padding-top:20px; text-align:right; }
-    .tl-entry:nth-child(even) .tl-card-small{ grid-column:2; grid-row:1; }
-    .tl-meta{font-size:12px;font-weight:600;color:var(--ink3);font-family:var(--f-mono)}
-    .tl-card-small{
-    padding:22px 24px;border-radius:var(--r);
-    background:var(--white);border:1px solid var(--border);
-    transition:transform 0.3s var(--ease-spr),box-shadow 0.3s,border-color 0.3s;
-    }
-    .tl-entry:nth-child(odd):hover  .tl-card-small{transform:translateX(-6px);box-shadow:var(--shadow-md);border-color:var(--teal-mid)}
-    .tl-entry:nth-child(even):hover .tl-card-small{transform:translateX(6px); box-shadow:var(--shadow-md);border-color:var(--teal-mid)}
-    .tl-tag-pill{
-    display:inline-block;margin-bottom:10px;
-    padding:3px 10px;border-radius:99px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;
-    }
-    .pill-edu  {background:var(--teal-lt);color:var(--teal)}
-    .pill-place{background:var(--gold-lt);color:var(--gold)}
-    .pill-vol  {background:var(--rose-lt);color:var(--rose)}
-    .pill-work {background:var(--slate-lt);color:var(--slate)}
-    .tl-title-sm{font-size:16px;font-weight:700;margin-bottom:4px}
-    .tl-sub-sm{font-size:12px;color:var(--ink3);margin-bottom:10px}
-    .tl-body-sm{font-size:13px;color:var(--ink2);line-height:1.65}
-    /* mobile: collapse to single column */
-    @media(max-width:760px){
-    .timeline::before{left:16px}
-    .timeline{gap:32px}
-    .tl-entry{grid-template-columns:1fr;padding-left:40px}
-    .tl-entry::after{left:16px;transform:translateX(-50%)}
-    .tl-entry:nth-child(odd) .tl-card-small,
-    .tl-entry:nth-child(even) .tl-card-small{grid-column:1;grid-row:1}
-    .tl-entry:nth-child(odd) .tl-meta,
-    .tl-entry:nth-child(even) .tl-meta{grid-column:1;grid-row:2;text-align:left;padding-top:4px}
-    .tl-entry:nth-child(odd):hover  .tl-card-small,
-    .tl-entry:nth-child(even):hover .tl-card-small{transform:translateX(4px)}
-    }
-
-    /* ═══════════════════════════════════════════
-    SKILLS
-    ═══════════════════════════════════════════ */
-    .skills-2col{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:28px}
-    .skill-rows{display:flex;flex-direction:column;gap:10px}
-    .skill-row{
-    display:flex;align-items:center;gap:12px;
-    padding:11px 16px;border-radius:var(--r-sm);
-    background:var(--white);border:1px solid var(--border);
-    font-size:14px;color:var(--ink2);
-    transition:border-color 0.2s,color 0.2s,transform 0.2s;
-    }
-    .skill-row:hover{border-color:var(--teal);color:var(--ink);transform:translateX(4px)}
-    .skill-row i{color:var(--teal);font-size:13px;flex-shrink:0}
-    .lang-section{margin-top:24px}
-    .lang-item{margin-bottom:18px}
-    .lang-header{display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px}
-    .lang-lv{color:var(--ink3);font-weight:500}
-    .lang-track{height:4px;border-radius:99px;background:var(--border);overflow:hidden}
-    .lang-fill{height:100%;border-radius:99px;background:var(--teal);transform:scaleX(0);transform-origin:left;transition:transform 1.1s var(--ease)}
-    .lang-fill.go{transform:scaleX(1)}
-
-    /* ═══════════════════════════════════════════
-    CONTACT
-    ═══════════════════════════════════════════ */
-    .contact-2col{display:grid;grid-template-columns:1fr 1fr;gap:36px;margin-top:32px;align-items:start}
-    .contact-form{display:flex;flex-direction:column;gap:18px}
-    .form-field{display:flex;flex-direction:column;gap:6px}
-    .form-field label{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--ink3)}
-    .form-field input,.form-field textarea{
-    padding:11px 16px;border-radius:var(--r-sm);
-    border:1px solid var(--border2);
-    background:var(--cream);color:var(--ink);
-    font-family:var(--f-body);font-size:15px;resize:vertical;outline:none;
-    transition:border-color 0.2s,box-shadow 0.2s;
-    }
-    .form-field input:focus,.form-field textarea:focus{
-    border-color:var(--teal);
-    box-shadow:0 0 0 3px color-mix(in srgb,var(--teal) 15%,transparent);
-    }
-    .form-row{display:flex;gap:12px;flex-wrap:wrap}
-    .contact-sidebar-items{display:flex;flex-direction:column;gap:20px}
-    .ci{display:flex;gap:14px;align-items:flex-start}
-    .ci-icon{
-    width:40px;height:40px;border-radius:12px;flex-shrink:0;
-    background:var(--teal-lt);color:var(--teal);
-    display:flex;align-items:center;justify-content:center;font-size:15px;
-    }
-    .ci-lbl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--ink3);margin-bottom:2px}
-    .ci-val{font-size:15px;font-weight:500}
-    .ci-val a{color:var(--teal)}
-    .ci-val a:hover{text-decoration:underline}
-    .avail-row{
-    display:flex;align-items:center;gap:10px;
-    padding:14px 18px;border-radius:var(--r-sm);
-    background:var(--teal-lt);border:1px solid var(--teal-mid);
-    font-size:14px;font-weight:600;color:var(--teal);margin-top:8px;
-    }
-
-    /* ═══════════════════════════════════════════
-    FOOTER
-    ═══════════════════════════════════════════ */
-    footer{
-    border-top:1px solid var(--border);
-    padding:32px clamp(16px,5vw,56px);
-    position:relative;z-index:1;
-    }
-    .footer-inner{
-    max-width:1100px;margin:0 auto;
-    display:flex;align-items:center;gap:20px;flex-wrap:wrap;
-    }
-    .footer-brand{display:flex;align-items:center;gap:12px;font-size:14px;color:var(--ink3)}
-    .footer-links{display:flex;gap:16px;margin-left:auto}
-    .footer-links a{font-size:18px;color:var(--ink3);transition:color 0.2s}
-    .footer-links a:hover{color:var(--teal)}
-    .footer-copy{font-size:13px;color:var(--ink3)}
-    .apa-note{
-    font-size:12px;color:var(--ink3);font-style:italic;
-    border-top:1px solid var(--border);padding-top:12px;margin-top:12px;
-    }
-
-    /* ═══════════════════════════════════════════
-    BACK TO TOP + TOAST
-    ═══════════════════════════════════════════ */
-    #backToTop{
-    position:fixed;right:24px;bottom:24px;z-index:80;
-    width:44px;height:44px;border-radius:50%;
-    background:var(--ink);color:var(--cream);border:none;
-    display:flex;align-items:center;justify-content:center;font-size:16px;cursor:none;
-    opacity:0;transform:translateY(16px);pointer-events:none;
-    transition:opacity 0.3s,transform 0.3s var(--ease-spr),background 0.2s;
-    box-shadow:0 4px 20px rgba(0,0,0,0.18);
-    }
-    #backToTop.show{opacity:1;transform:translateY(0);pointer-events:auto}
-    #backToTop:hover{background:var(--teal);transform:translateY(-4px)}
-    #toast{
-    position:fixed;left:50%;bottom:24px;z-index:200;
-    transform:translateX(-50%) translateY(18px);
-    padding:11px 20px;border-radius:var(--r-sm);
-    background:var(--ink);color:var(--cream);
-    font-size:14px;font-weight:500;
-    box-shadow:var(--shadow-lg);opacity:0;pointer-events:none;
-    transition:opacity 0.25s,transform 0.25s var(--ease);
-    white-space:nowrap;
-    }
-    #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-
-    /* ═══════════════════════════════════════════
-    RESPONSIVE
-    ═══════════════════════════════════════════ */
-    @media(max-width:860px){
-    .philosophy-layout,.global-layout,.contact-2col,.skills-2col{grid-template-columns:1fr}
-    .nav-links{display:none}
-    body,.btn{cursor:auto}
-    #cursor{display:none}
-    .cover-name{font-size:clamp(52px,12vw,90px)}
-    }
-    @media(max-width:600px){
-    .toc-grid{grid-template-columns:1fr}
-    .cert-grid{grid-template-columns:1fr}
-    .refs-grid{grid-template-columns:1fr}
-    .goals-grid{grid-template-columns:1fr}
-    .cover-sep{display:none}
-    }
-
-    /* ═══════════════════════════════════════════
-    REDUCED MOTION
-    ═══════════════════════════════════════════ */
-    @media(prefers-reduced-motion:reduce){
-    *,*::before,*::after{animation-duration:0.01ms!important;transition-duration:0.01ms!important}
-    html{scroll-behavior:auto}
-    }
-
-        /* ═══════════════════════════════════════════
-    ROTATING HERO BADGE
-    ═══════════════════════════════════════════ */
-    .hero-badge{
-    position:absolute;
-    right:clamp(20px,6vw,100px);
-    top:50%;transform:translateY(-50%);
-    width:148px;height:148px;
-    opacity:0;animation:fadeUp 1s 1.1s var(--ease) forwards;
-    }
-    .hero-badge-ring{
-    width:100%;height:100%;
-    border-radius:50%;
-    border:1px solid var(--border2);
-    background:var(--white);
-    display:flex;flex-direction:column;
-    align-items:center;justify-content:center;gap:6px;
-    box-shadow:var(--shadow-md);
-    animation:rotateBadge 40s linear infinite;
-    }
-    .hero-badge-ring i{font-size:28px;color:var(--teal)}
-    .hero-badge-ring span{
-    font-size:12px;font-weight:700;color:var(--ink2);
-    text-align:center;line-height:1.3;letter-spacing:0.02em;
-    }
-    @keyframes rotateBadge{
-    from{transform:rotate(0deg)}
-    to{transform:rotate(360deg)}
-    }
-    /* counter-rotate the text so it stays upright */
-    .hero-badge-ring i,
-    .hero-badge-ring span{
-    animation:counterRotate 40s linear infinite;
-    }
-    @keyframes counterRotate{
-    from{transform:rotate(0deg)}
-    to{transform:rotate(-360deg)}
-    }
-    @media(max-width:860px){.hero-badge{display:none}}
-    </style>
+    <link rel="stylesheet" href="assets/styles.css">
+    <link rel="stylesheet" href="assets/scripts.js">
     </head>
-
     <body>
+
+    <!-- Feature 4: Theme wipe overlay -->
+    <div id="theme-wipe"></div>
+    <!-- Feature 5: Scroll progress bar -->
+    <div id="scroll-progress"></div>
 
     <!-- Noise + orbs -->
     <div class="noise" aria-hidden="true"></div>
     <div class="orb orb-1" aria-hidden="true"></div>
     <div class="orb orb-2" aria-hidden="true"></div>
     <div class="orb orb-3" aria-hidden="true"></div>
-    
 
     <!-- Custom cursor -->
     <div id="cursor" aria-hidden="true"><div id="cursor-inner"></div></div>
@@ -873,10 +32,46 @@
     <!-- Skip link -->
     <a class="skip-link" href="#main">Skip to content</a>
 
-    <!-- ═══ NAV ═══ -->
+    <!-- Feature 6: Floating dot nav -->
+    <nav id="dot-nav" aria-label="Section navigation">
+    <div class="dot-nav-item" data-nav="top"          data-label="Cover"></div>
+    <div class="dot-nav-item" data-nav="originality"  data-label="Originality"></div>
+    <div class="dot-nav-item" data-nav="toc"          data-label="Contents"></div>
+    <div class="dot-nav-item" data-nav="about"        data-label="About"></div>
+    <div class="dot-nav-item" data-nav="philosophy"   data-label="Philosophy"></div>
+    <div class="dot-nav-item" data-nav="career"       data-label="Goals"></div>
+    <div class="dot-nav-item" data-nav="resume"       data-label="Résumé"></div>
+    <div class="dot-nav-item" data-nav="samples"      data-label="Samples"></div>
+    <div class="dot-nav-item" data-nav="certificates" data-label="Certs"></div>
+    <div class="dot-nav-item" data-nav="academic"     data-label="Courses"></div>
+    <div class="dot-nav-item" data-nav="references"   data-label="References"></div>
+    <div class="dot-nav-item" data-nav="global"       data-label="Global"></div>
+    <div class="dot-nav-item" data-nav="experience"   data-label="Experience"></div>
+    <div class="dot-nav-item" data-nav="contact"      data-label="Contact"></div>
+    </nav>
+
+    <!-- Feature 3: PDF Modal -->
+    <div id="pdf-modal" role="dialog" aria-modal="true" aria-labelledby="pdf-modal-title">
+    <div id="pdf-modal-inner">
+        <div id="pdf-modal-bar">
+        <span id="pdf-modal-title">Document Preview</span>
+        <button id="pdf-modal-close" aria-label="Close preview">&times;</button>
+        </div>
+        <iframe id="pdf-modal-frame" title="PDF Preview"></iframe>
+    </div>
+    </div>
+
+    <!-- NAV -->
     <nav class="nav" aria-label="Primary">
     <a href="#top" class="nav-logo">
+        <!-- Feature 1: Progress ring wrapping the SG logo -->
+        <div class="logo-ring-wrap">
+        <svg class="logo-ring-svg" viewBox="0 0 46 46" aria-hidden="true">
+            <circle class="logo-ring-bg" cx="23" cy="23" r="21"/>
+            <circle class="logo-ring-fill" cx="23" cy="23" r="21"/>
+        </svg>
         <div class="logo-mark">SG</div>
+        </div>
         <div class="nav-mark-badge">
         <span style="font-weight:700;font-size:15px">Sajjan Gautam</span><br>
         <span style="color:var(--ink3);font-size:12px">PSW E-Portfolio</span>
@@ -897,22 +92,15 @@
 
     <main id="main">
 
-    <!-- ═══════════════════════════════════════════
-    COVER PAGE
-    ═══════════════════════════════════════════ -->
+    <!-- COVER PAGE -->
     <section id="top" class="cover" aria-label="Cover page">
     <div class="cover-inner">
         <div class="cover-eyebrow">
         <div class="pulse-dot"></div>
-        
         </div>
-
-        <h1 class="cover-name">
-        Sajjan<br><em>Gautam</em>
-        </h1>
-
-        <span class="cover-role">Personal Support Worker Student &mdash; Cohort 2025&ndash;2026</span>
-
+        <h1 class="cover-name">Sajjan<br><em>Gautam</em></h1>
+        <!-- Feature 2: Typewriter target (JS will type into this) -->
+        <span class="cover-role" id="typewriter-target"></span>
         <div class="cover-meta">
         <span><i class="fa-solid fa-location-dot"></i> Toronto, ON, Canada</span>
         <div class="cover-sep"></div>
@@ -920,13 +108,11 @@
         <div class="cover-sep"></div>
         <span><i class="fa-solid fa-phone"></i> +1 (514) 576-4015</span>
         </div>
-
         <div class="cover-actions">
         <a href="#toc" class="btn btn-primary">View Portfolio <i class="fa-solid fa-arrow-down"></i></a>
         <a href="#contact" class="btn btn-outline">Get in Touch</a>
-        <a href="assets/documents/resume.pdf" download class="btn btn-gold"><i class="fa-solid fa-download"></i> Download Résumé</a>
+        <a href="assets/certificates/pswresume.pdf" download class="btn btn-gold"><i class="fa-solid fa-download"></i> Download Résumé</a>
         </div>
-
         <div class="cover-badge-row">
         <div class="score-badge"><span class="score-num" data-counter data-target="9">0</span><span class="score-lbl">Sections<br>Completed</span></div>
         <div class="score-badge"><span class="score-num" data-counter data-target="4">0</span><span class="score-lbl">Certificates<br>Earned</span></div>
@@ -934,21 +120,13 @@
         <div class="score-badge"><span class="score-num" data-counter data-target="3">0</span><span class="score-lbl">Professional<br>References</span></div>
         </div>
     </div>
-
-    <!--<div class="cover-scroll" aria-hidden="true">
-        <div class="scroll-line"></div>
-        <span>Scroll</span>
-    </div>
-    </section> -->
-
-        <!-- Rotating badge -->
+    <!-- Rotating badge -->
     <div class="hero-badge" aria-hidden="true">
         <div class="hero-badge-ring">
         <i class="fa-solid fa-hand-holding-heart"></i>
         <span>PSW<br>2025–26</span>
         </div>
     </div>
-    
     <div class="cover-scroll" aria-hidden="true">
         <div class="scroll-line"></div>
         <span>Scroll</span>
@@ -964,7 +142,7 @@
         <span>Food Safety Certified</span><span class="dot-sep">·</span>
         <span>Mask Fit Certified</span><span class="dot-sep">·</span>
         <span>Clinical Placement — Centenary Hospital</span><span class="dot-sep">·</span>
-        <span>Community Placement — Seven Oaks</span><span class="dot-sep">·</span>
+        <span>Community Placement — Seven Oaks Long Term Care Home</span><span class="dot-sep">·</span>
         <span>Infection Prevention &amp; Control</span><span class="dot-sep">·</span>
         <span>Palliative Care</span><span class="dot-sep">·</span>
         <span>AEC Software Development Graduate</span><span class="dot-sep">·</span>
@@ -974,36 +152,25 @@
         <span>Food Safety Certified</span><span class="dot-sep">·</span>
         <span>Mask Fit Certified</span><span class="dot-sep">·</span>
         <span>Clinical Placement — Centenary Hospital</span><span class="dot-sep">·</span>
-        <span>Community Placement — Seven Oaks</span><span class="dot-sep">·</span>
+        <span>Community Placement — Seven Oaks Long Term Care Home</span><span class="dot-sep">·</span>
         <span>Infection Prevention &amp; Control</span><span class="dot-sep">·</span>
         <span>Palliative Care</span><span class="dot-sep">·</span>
         <span>AEC Software Development Graduate</span><span class="dot-sep">·</span>
     </div>
     </div>
 
-    <!-- ═══════════════════════════════════════════
-    1. STATEMENT OF ORIGINALITY
-    ═══════════════════════════════════════════ -->
+    <!-- 1. STATEMENT OF ORIGINALITY -->
     <section id="originality" class="section reveal" aria-labelledby="h-orig">
     <div class="section-label">Section 01</div>
-    <h2 id="h-orig" class="section-heading md">
-        Statement of Originality &amp; Confidentiality
-        <span class="marks-chip"><i class="fa-solid fa-star"></i></span>
-    </h2>
+    <h2 id="h-orig" class="section-heading md">Statement of Originality &amp; Confidentiality <span class="marks-chip"><i class="fa-solid fa-star"></i></span></h2>
     <div style="margin-top:24px">
         <div class="orig-card">
         <div class="orig-icon"><i class="fa-solid fa-certificate"></i></div>
         <div>
             <h3>My Certification Statement</h3>
-                <p>
-            I, Sajjan Gautam, certify that the work contained in this e-portfolio is entirely my own original work, developed during my Personal Support Worker (PSW) training program (September 2025 – April 2026). The reflections, written submissions, skill demonstrations, and documentation found throughout this portfolio represent my genuine learning, growth, and professional development. Where applicable, this work also draws on knowledge and skills gained through my previous Attestation of College Studies (AEC) in Software Development (September 2023 – August 2025), which has informed my approach to documentation, critical thinking, and professional accountability in healthcare settings.
-            </p>
-            <p style="margin-top:12px;font-size:15px;color:var(--ink2);line-height:1.75">
-            Any information pertaining to clients, residents, healthcare environments, or clinical experiences has been fully anonymized or omitted to protect individual privacy and to uphold the confidentiality standards required by applicable healthcare legislation and program expectations. This portfolio is intended solely for educational assessment and professional evaluation purposes, and may not be reproduced, distributed, or shared without my express written consent.
-            </p>
-            <p style="margin-top:12px;font-size:13px;color:var(--ink3);line-height:1.7;border-top:1px solid var(--teal-mid);padding-top:12px">
-            <strong>⚠ Learning Repository Disclaimer:</strong> This e-portfolio is hosted as an educational learning project and digital showcase. It is not intended to represent a commercial product or service. All assets, documents, and personal information contained herein are shared solely for academic evaluation. Any third-party viewer accessing this portfolio does so for educational reference only.
-            </p>
+            <p>I, Sajjan Gautam, certify that the work contained in this e-portfolio is entirely my own original work, developed during my Personal Support Worker (PSW) training program (September 2025 – April 2026). The reflections, written submissions, skill demonstrations, and documentation found throughout this portfolio represent my genuine learning, growth, and professional development. Where applicable, this work also draws on knowledge and skills gained through my previous Attestation of College Studies (AEC) in Software Development (September 2023 – August 2025), which has informed my approach to documentation, critical thinking, and professional accountability in healthcare settings.</p>
+            <p style="margin-top:12px;font-size:15px;color:var(--ink2);line-height:1.75">Any information pertaining to clients, residents, healthcare environments, or clinical experiences has been fully anonymized or omitted to protect individual privacy and to uphold the confidentiality standards required by applicable healthcare legislation and program expectations. This portfolio is intended solely for educational assessment and professional evaluation purposes, and may not be reproduced, distributed, or shared without my express written consent.</p>
+            <p style="margin-top:12px;font-size:13px;color:var(--ink3);line-height:1.7;border-top:1px solid var(--teal-mid);padding-top:12px"><strong>⚠ Learning Repository Disclaimer:</strong> This e-portfolio is hosted as an educational learning project and digital showcase. It is not intended to represent a commercial product or service. All assets, documents, and personal information contained herein are shared solely for academic evaluation. Any third-party viewer accessing this portfolio does so for educational reference only.</p>
         </div>
         </div>
     </div>
@@ -1011,37 +178,31 @@
 
     <hr class="divider">
 
-    <!-- ═══════════════════════════════════════════
-    2. TABLE OF CONTENTS
-    ═══════════════════════════════════════════ -->
+    <!-- 2. TABLE OF CONTENTS -->
     <section id="toc" class="section reveal" aria-labelledby="h-toc">
     <div class="section-label">Section 02</div>
-    <h2 id="h-toc" class="section-heading md">
-        Table of Contents
-        <span class="marks-chip"><i class="fa-solid fa-star"></i></span>
-    </h2>
+    <h2 id="h-toc" class="section-heading md">Table of Contents <span class="marks-chip"><i class="fa-solid fa-star"></i></span></h2>
     <div class="toc-grid stagger" style="margin-top:28px">
-        <a href="#originality" class="toc-link"><span class="toc-num">01</span> Statement of Originality <span class="toc-marks"></span></a>
-        <a href="#toc"         class="toc-link"><span class="toc-num">02</span> Table of Contents <span class="toc-marks"></span></a>
-        <a href="#philosophy"  class="toc-link"><span class="toc-num">03</span> Work Philosophy <span class="toc-marks"></span></a>
-        <a href="#career"      class="toc-link"><span class="toc-num">04</span> Career Goals <span class="toc-marks"></span></a>
-        <a href="#resume"      class="toc-link"><span class="toc-num">05</span> Résumé &amp; Cover Letter <span class="toc-marks"></span></a>
-        <a href="#samples"     class="toc-link"><span class="toc-num">06</span> Work Samples <span class="toc-marks"></span></a>
-        <a href="#certificates" class="toc-link"><span class="toc-num">07</span> Certifications &amp; Awards <span class="toc-marks"></span></a>
-        <a href="#academic"    class="toc-link"><span class="toc-num">08</span> Academic Plan of Study <span class="toc-marks"></span></a>
-        <a href="#references"  class="toc-link"><span class="toc-num">09</span> References <span class="toc-marks"></span></a>
-        <a href="#global"      class="toc-link"><span class="toc-num">10</span> Global Citizenship <span class="toc-marks"></span></a>
+        <a href="#originality" class="toc-link"><span class="toc-num">01</span> Statement of Originality</a>
+        <a href="#toc"         class="toc-link"><span class="toc-num">02</span> Table of Contents</a>
+        <a href="#philosophy"  class="toc-link"><span class="toc-num">03</span> Work Philosophy</a>
+        <a href="#career"      class="toc-link"><span class="toc-num">04</span> Career Goals</a>
+        <a href="#resume"      class="toc-link"><span class="toc-num">05</span> Résumé &amp; Cover Letter</a>
+        <a href="#samples"     class="toc-link"><span class="toc-num">06</span> Work Samples</a>
+        <a href="#certificates" class="toc-link"><span class="toc-num">07</span> Certifications &amp; Awards</a>
+        <a href="#academic"    class="toc-link"><span class="toc-num">08</span> Academic Plan of Study</a>
+        <a href="#references"  class="toc-link"><span class="toc-num">09</span> References</a>
+        <a href="#global"      class="toc-link"><span class="toc-num">10</span> Global Citizenship</a>
     </div>
     </section>
 
     <hr class="divider">
 
-    <!-- About / overview -->
+    <!-- ABOUT -->
     <section id="about" class="section reveal" aria-labelledby="h-about">
     <div class="section-label">About Me</div>
     <h2 id="h-about" class="section-heading">From Code<br><em style="font-style:italic;color:var(--teal)">to Care.</em></h2>
     <p class="section-sub">Transitioning from software development to healthcare support — bringing the same discipline, precision, and client-first mindset to every interaction.</p>
-
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:32px" class="stagger">
         <div class="card">
         <h3 style="font-size:16px;font-weight:700;margin-bottom:12px"><i class="fa-solid fa-heart" style="color:var(--teal);margin-right:8px"></i>What I Focus On</h3>
@@ -1066,398 +227,227 @@
 
     <hr class="divider">
 
-    <!-- ═══════════════════════════════════════════
-    3. WORK PHILOSOPHY
-    ═══════════════════════════════════════════ -->
+    <!-- 3. WORK PHILOSOPHY -->
     <section id="philosophy" class="section reveal" aria-labelledby="h-phil">
     <div class="section-label">Section 03</div>
-    <h2 id="h-phil" class="section-heading md">
-        Work Philosophy
-        <span class="marks-chip"><i class="fa-solid fa-star"></i> </span>
-    </h2>
+    <h2 id="h-phil" class="section-heading md">Work Philosophy <span class="marks-chip"><i class="fa-solid fa-star"></i></span></h2>
     <p class="section-sub">My values and beliefs as they relate to working as a Personal Support Worker.</p>
-
     <div class="philosophy-layout" style="margin-top:28px">
         <div class="philosophy-quote reveal">
-        <div>
-            "My philosophy as a Personal Support Worker centres on compassion, dignity, and unwavering respect for every individual in my care. I believe that quality care is not merely a set of tasks — it is a relationship built on trust, empathy, and consistent presence."
-        </div>
+        <div>"My philosophy as a Personal Support Worker centres on compassion, dignity, and unwavering respect for every individual in my care. I believe that quality care is not merely a set of tasks — it is a relationship built on trust, empathy, and consistent presence."</div>
         <div class="quote-attr">— Sajjan Gautam, PSW Student</div>
         </div>
-
         <div class="philosophy-values stagger">
-        <div class="value-item">
-            <div class="value-icon"><i class="fa-solid fa-person-circle-check"></i></div>
-            <div>
-            <h4>Client-Centred Care</h4>
-            <p>Every decision I make starts with the client's preferences, independence, and dignity. I adapt my approach to each person's unique needs.</p>
-            </div>
-        </div>
-        <div class="value-item">
-            <div class="value-icon"><i class="fa-solid fa-shield-halved"></i></div>
-            <div>
-            <h4>Safety &amp; Infection Control</h4>
-            <p>Safe practice is non-negotiable. I follow all protocols rigorously to protect clients, colleagues, and myself from preventable harm.</p>
-            </div>
-        </div>
-        <div class="value-item">
-            <div class="value-icon"><i class="fa-solid fa-comments"></i></div>
-            <div>
-            <h4>Clear Communication</h4>
-            <p>I communicate openly with clients, families, and the care team — reporting changes, asking questions, and listening actively.</p>
-            </div>
-        </div>
-        <div class="value-item">
-            <div class="value-icon"><i class="fa-solid fa-handshake"></i></div>
-            <div>
-            <h4>Collaboration &amp; Accountability</h4>
-            <p>Great care happens in teams. I show up prepared, follow through on commitments, and support my colleagues with integrity.</p>
-            </div>
-        </div>
+        <div class="value-item"><div class="value-icon"><i class="fa-solid fa-person-circle-check"></i></div><div><h4>Client-Centred Care</h4><p>Every decision I make starts with the client's preferences, independence, and dignity. I adapt my approach to each person's unique needs.</p></div></div>
+        <div class="value-item"><div class="value-icon"><i class="fa-solid fa-shield-halved"></i></div><div><h4>Safety &amp; Infection Control</h4><p>Safe practice is non-negotiable. I follow all protocols rigorously to protect clients, colleagues, and myself from preventable harm.</p></div></div>
+        <div class="value-item"><div class="value-icon"><i class="fa-solid fa-comments"></i></div><div><h4>Clear Communication</h4><p>I communicate openly with clients, families, and the care team — reporting changes, asking questions, and listening actively.</p></div></div>
+        <div class="value-item"><div class="value-icon"><i class="fa-solid fa-handshake"></i></div><div><h4>Collaboration &amp; Accountability</h4><p>Great care happens in teams. I show up prepared, follow through on commitments, and support my colleagues with integrity.</p></div></div>
         </div>
     </div>
     </section>
 
     <hr class="divider">
 
-    <!-- ═══════════════════════════════════════════
-    4. CAREER GOALS
-    ═══════════════════════════════════════════ -->
+    <!-- 4. CAREER GOALS -->
     <section id="career" class="section reveal" aria-labelledby="h-career">
     <div class="section-label">Section 04</div>
-    <h2 id="h-career" class="section-heading md">
-        Career Goals
-        <span class="marks-chip"><i class="fa-solid fa-star"></i></span>
-    </h2>
+    <h2 id="h-career" class="section-heading md">Career Goals <span class="marks-chip"><i class="fa-solid fa-star"></i></span></h2>
     <p class="section-sub">My professional goals for the next two to five years.</p>
-
     <div class="goals-grid stagger" style="margin-top:28px">
-        <div class="goal-card">
-        <div class="goal-yr">Year 1 — 2026</div>
-        <h4>Secure a PSW Position</h4>
-        <p>Obtain employment as a PSW in a long-term care or hospital setting in Toronto after graduation. Build confidence in all clinical skills and establish a strong professional reputation.</p>
-        </div>
-        <div class="goal-card">
-        <div class="goal-yr">Year 2–3 — 2027–28</div>
-        <h4>Specialise in Dementia Care</h4>
-        <p>Deepen my skills in dementia and cognitive care, pursuing additional certifications. Contribute meaningfully to the lives of residents living with complex needs.</p>
-        </div>
-        <div class="goal-card">
-        <div class="goal-yr">Year 4–5 — 2029–30</div>
-        <h4>Advance in Healthcare</h4>
-        <p>Pursue further healthcare education — potentially a Personal Support Worker supervisor role or enrolment in a nursing or health sciences program to expand my scope of practice.</p>
-        </div>
+        <div class="goal-card"><div class="goal-yr">Year 1 — 2026</div><h4>Secure a PSW Position</h4><p>Obtain employment as a PSW in a long-term care or hospital setting in Toronto after graduation. Build confidence in all clinical skills and establish a strong professional reputation.</p></div>
+        <div class="goal-card"><div class="goal-yr">Year 2–3 — 2027–28</div><h4>Specialise in Dementia Care</h4><p>Deepen my skills in dementia and cognitive care, pursuing additional certifications. Contribute meaningfully to the lives of residents living with complex needs.</p></div>
+        <div class="goal-card"><div class="goal-yr">Year 4–5 — 2029–30</div><h4>Advance in Healthcare</h4><p>Pursue further healthcare education — potentially a Personal Support Worker supervisor role or enrolment in a nursing or health sciences program to expand my scope of practice.</p></div>
     </div>
-
-    <div class="goals-paragraph reveal">
-        <strong>Long-term vision:</strong> Over the next two to five years, my goal is to gain substantial professional experience working as a Personal Support Worker in hospital and long-term care environments in Toronto. I aim to strengthen my skills in infection control, mobility assistance, dementia care, palliative support, and communication with both clients and healthcare teams. I am committed to continuing education and professional development. In the future, I may pursue further healthcare credentials to expand my role in direct patient care, combining my analytical background with clinical expertise to provide exceptional, evidence-informed support.
-    </div>
+    <div class="goals-paragraph reveal"><strong>Long-term vision:</strong> Over the next two to five years, my goal is to gain substantial professional experience working as a Personal Support Worker in hospital and long-term care environments in Toronto. I aim to strengthen my skills in infection control, mobility assistance, dementia care, palliative support, and communication with both clients and healthcare teams. I am committed to continuing education and professional development. In the future, I may pursue further healthcare credentials to expand my role in direct patient care, combining my analytical background with clinical expertise to provide exceptional, evidence-informed support.</div>
     </section>
 
     <hr class="divider">
 
-    <!-- ═══════════════════════════════════════════
-    5. RÉSUMÉ & COVER LETTER
-    ═══════════════════════════════════════════ -->
+    <!-- 5. RÉSUMÉ & COVER LETTER -->
     <section id="resume" class="section reveal" aria-labelledby="h-resume">
     <div class="section-label">Section 05</div>
-    <h2 id="h-resume" class="section-heading md">
-        Résumé &amp; Cover Letter
-        <span class="marks-chip"><i class="fa-solid fa-star"></i> </span>
-    </h2>
-
+    <h2 id="h-resume" class="section-heading md">Résumé &amp; Cover Letter <span class="marks-chip"><i class="fa-solid fa-star"></i></span></h2>
     <div class="doc-list stagger" style="margin-top:24px">
         <div class="doc-item">
         <div class="doc-icon"><i class="fa-regular fa-file-pdf" style="color:var(--rose)"></i></div>
-        <div class="doc-info">
-            <div class="doc-title">PSW Résumé</div>
-            <div class="doc-desc">Professional résumé highlighting PSW education, clinical placements, certifications, and relevant experience.</div>
+        <div class="doc-info"><div class="doc-title">PSW Résumé</div><div class="doc-desc">Professional résumé highlighting PSW education, clinical placements, certifications, and relevant experience.</div></div>
+        <div style="display:flex;gap:8px">
+            <a class="btn btn-primary btn-sm" href="assets/certificates/pswresume.pdf" download><i class="fa-solid fa-download"></i> Download</a>
+            <a class="btn btn-outline btn-sm" href="assets/certificates/pswresume.pdf" onclick="openPdfModal(this);return false;" data-pdf-title="PSW Résumé"><i class="fa-regular fa-eye"></i> Preview</a>
         </div>
-        <a class="btn btn-primary btn-sm" href="assets/certificates/pswresume.pdf" download><i class="fa-solid fa-download"></i> Download</a>
         </div>
         <div class="doc-item">
         <div class="doc-icon"><i class="fa-regular fa-envelope-open" style="color:var(--teal)"></i></div>
-        <div class="doc-info">
-            <div class="doc-title">Cover Letter</div>
-            <div class="doc-desc">Sample cover letter for PSW healthcare employment opportunities, demonstrating communication skills and professional voice.</div>
+        <div class="doc-info"><div class="doc-title">Cover Letter</div><div class="doc-desc">Sample cover letter for PSW healthcare employment opportunities, demonstrating communication skills and professional voice.</div></div>
+        <div style="display:flex;gap:8px">
+            <a class="btn btn-primary btn-sm" href="assets/certificates/pswcoverpage.pdf" download><i class="fa-solid fa-download"></i> Download</a>
+            <a class="btn btn-outline btn-sm" href="assets/certificates/pswcoverpage.pdf" onclick="openPdfModal(this);return false;" data-pdf-title="Cover Letter"><i class="fa-regular fa-eye"></i> Preview</a>
         </div>
-        <a class="btn btn-primary btn-sm" href="assets/certificates/pswcoverpage.pdf" download><i class="fa-solid fa-download"></i> Download</a>
         </div>
     </div>
     </section>
 
     <hr class="divider">
 
-    <!-- ═══════════════════════════════════════════
-    6. WORK SAMPLES 
-    ═══════════════════════════════════════════ -->
+    <!-- 6. WORK SAMPLES -->
     <section id="samples" class="section reveal" aria-labelledby="h-samples">
     <div class="section-label">Section 06</div>
-    <h2 id="h-samples" class="section-heading md">
-        Work Samples
-        <span class="marks-chip"><i class="fa-solid fa-star"></i> </span>
-    </h2>
+    <h2 id="h-samples" class="section-heading md">Work Samples <span class="marks-chip"><i class="fa-solid fa-star"></i></span></h2>
     <p class="section-sub">POP assignment, midterm evaluation, and final clinical evaluation from PSHS 125 — demonstrating past clinical and lab experiences.</p>
-
     <div class="samples-row stagger" style="margin-top:24px">
         <div class="sample-card">
         <div class="sample-n">01 · PSHS 125</div>
         <div class="sample-name">POP Assignment</div>
         <div class="sample-desc">Peer Observation Practice assignment completed with a classmate — demonstrating practical skill performance and peer evaluation.</div>
-        <a class="btn btn-outline btn-sm" href="assets/certificates/pop.pdf" download>Download <i class="fa-solid fa-arrow-down"></i></a>
-        <a class="btn btn-outline" href="assets/certificates/pop.pdf" target="_blank" rel="noopener" data-role="preview" aria-label="Preview POP Assignment"><i class="fa-regular fa-eye"></i> Preview</a>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <a class="btn btn-outline btn-sm" href="assets/certificates/pop.pdf" download>Download <i class="fa-solid fa-arrow-down"></i></a>
+            <a class="btn btn-outline btn-sm" href="assets/certificates/pop.pdf" onclick="openPdfModal(this);return false;" data-pdf-title="POP Assignment"><i class="fa-regular fa-eye"></i> Preview</a>
+        </div>
         </div>
         <div class="sample-card">
         <div class="sample-n">02 · PSHS 125</div>
         <div class="sample-name">Midterm Clinical Evaluation</div>
         <div class="sample-desc">Midterm evaluation from clinical practice — documenting performance, skill competency, and areas of growth at the halfway point.</div>
-        <a class="btn btn-outline btn-sm" href="assets/certificates/midterm-evaluation.pdf" download>Download <i class="fa-solid fa-arrow-down"></i></a>
-        <a class="btn btn-outline" href="assets/certificates/midterm-evaluation.pdf" target="_blank" rel="noopener" data-role="preview" aria-label="Preview Midterm Clinical Evaluation"><i class="fa-regular fa-eye"></i> Preview</a>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <a class="btn btn-outline btn-sm" href="assets/certificates/midterm-evaluation.pdf" download>Download <i class="fa-solid fa-arrow-down"></i></a>
+            <a class="btn btn-outline btn-sm" href="assets/certificates/midterm-evaluation.pdf" onclick="openPdfModal(this);return false;" data-pdf-title="Midterm Clinical Evaluation"><i class="fa-regular fa-eye"></i> Preview</a>
+        </div>
         </div>
         <div class="sample-card">
         <div class="sample-n">03 · PSHS 125</div>
         <div class="sample-name">Final Clinical Evaluation</div>
         <div class="sample-desc">Final clinical evaluation demonstrating overall competency, professionalism, and readiness for entry-level PSW employment.</div>
-        <a class="btn btn-outline btn-sm" href="assets/certificates/final-evaluation.pdf" download>Download <i class="fa-solid fa-arrow-down"></i></a>
-        <a class="btn btn-outline" href="assets/certificates/final-evaluation.pdf" target="_blank" rel="noopener" data-role="preview" aria-label="Preview Final Clinical Evaluation"><i class="fa-regular fa-eye"></i> Preview</a>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <a class="btn btn-outline btn-sm" href="assets/certificates/final-evaluation.pdf" download>Download <i class="fa-solid fa-arrow-down"></i></a>
+            <a class="btn btn-outline btn-sm" href="assets/certificates/final-evaluation.pdf" onclick="openPdfModal(this);return false;" data-pdf-title="Final Clinical Evaluation"><i class="fa-regular fa-eye"></i> Preview</a>
+        </div>
         </div>
     </div>
     </section>
 
     <hr class="divider">
 
-    <!-- ═══════════════════════════════════════════
-    7. CERTIFICATIONS, DIPLOMAS, AWARDS
-    ═══════════════════════════════════════════ -->
+    <!-- 7. CERTIFICATIONS -->
     <section id="certificates" class="section reveal" aria-labelledby="h-certs">
     <div class="section-label">Section 07</div>
-    <h2 id="h-certs" class="section-heading md">
-        Certifications, Diplomas &amp; Awards
-        <span class="marks-chip"><i class="fa-solid fa-star"></i> </span>
-    </h2>
+    <h2 id="h-certs" class="section-heading md">Certifications, Diplomas &amp; Awards <span class="marks-chip"><i class="fa-solid fa-star"></i></span></h2>
     <p class="section-sub">Copies of certificates and achievements relevant to PSW practice. PDFs will activate once uploaded to the server.</p>
-
     <div class="cert-grid stagger" style="margin-top:28px">
 
-        <!-- Mask Fit -->
         <article class="cert-card" data-cert data-cert-file="assets/certificates/MaskFit-Certificate.pdf">
-        <div class="cert-top">
-            <div class="cert-ico ico-teal"><i class="fa-solid fa-mask-face"></i></div>
-            <span class="cert-badge b-teal">Respiratory</span>
-        </div>
+        <div class="cert-top"><div class="cert-ico ico-teal"><i class="fa-solid fa-mask-face"></i></div><span class="cert-badge b-teal">Respiratory</span></div>
         <div class="cert-name">Mask Fit Certificate</div>
         <p class="cert-desc">N95 respiratory protection and mask fit testing — required for clinical placement and hospital environments.</p>
         <p class="cert-status" data-role="status">Checking availability…</p>
         <div class="cert-actions">
-            <a class="btn btn-primary" href="assets/certificates/MaskFit-Certificate.pdf" download data-role="download" aria-label="Download Mask Fit Certificate"><i class="fa-solid fa-download"></i> Download</a>
-            <a class="btn btn-outline" href="assets/certificates/MaskFit-Certificate.pdf" target="_blank" rel="noopener" data-role="preview" aria-label="Preview Mask Fit Certificate"><i class="fa-regular fa-eye"></i> Preview</a>
+            <a class="btn btn-primary" href="assets/certificates/MaskFit-Certificate.pdf" download data-role="download"><i class="fa-solid fa-download"></i> Download</a>
+            <a class="btn btn-outline" href="assets/certificates/MaskFit-Certificate.pdf" data-role="preview" onclick="openPdfModal(this);return false;" data-pdf-title="Mask Fit Certificate"><i class="fa-regular fa-eye"></i> Preview</a>
         </div>
         </article>
 
-        <!-- CPR/BLS -->
         <article class="cert-card" data-cert data-cert-file="assets/certificates/CPR-BLS-Standard-First-Aid.pdf">
-        <div class="cert-top">
-            <div class="cert-ico ico-rose"><i class="fa-solid fa-heart-pulse"></i></div>
-            <span class="cert-badge b-rose">Emergency Care</span>
-        </div>
+        <div class="cert-top"><div class="cert-ico ico-rose"><i class="fa-solid fa-heart-pulse"></i></div><span class="cert-badge b-rose">Emergency Care</span></div>
         <div class="cert-name">CPR BLS &amp; Standard First Aid</div>
         <p class="cert-desc">Basic Life Support CPR and Standard First Aid certification — essential for all clinical healthcare roles.</p>
         <p class="cert-status" data-role="status">Checking availability…</p>
         <div class="cert-actions">
-            <a class="btn btn-primary" href="assets/certificates/CPR-BLS-Standard-First-Aid.pdf" download data-role="download" aria-label="Download CPR BLS Certificate"><i class="fa-solid fa-download"></i> Download</a>
-            <a class="btn btn-outline" href="assets/certificates/CPR-BLS-Standard-First-Aid.pdf" target="_blank" rel="noopener" data-role="preview" aria-label="Preview CPR BLS Certificate"><i class="fa-regular fa-eye"></i> Preview</a>
+            <a class="btn btn-primary" href="assets/certificates/CPR-BLS-Standard-First-Aid.pdf" download data-role="download"><i class="fa-solid fa-download"></i> Download</a>
+            <a class="btn btn-outline" href="assets/certificates/CPR-BLS-Standard-First-Aid.pdf" data-role="preview" onclick="openPdfModal(this);return false;" data-pdf-title="CPR BLS &amp; Standard First Aid"><i class="fa-regular fa-eye"></i> Preview</a>
         </div>
         </article>
 
-        <!-- Food Handling -->
         <article class="cert-card" data-cert data-cert-file="assets/certificates/Food-Handling-Certificate.pdf">
-        <div class="cert-top">
-            <div class="cert-ico ico-gold"><i class="fa-solid fa-utensils"></i></div>
-            <span class="cert-badge b-gold">Food Safety</span>
-        </div>
+        <div class="cert-top"><div class="cert-ico ico-gold"><i class="fa-solid fa-utensils"></i></div><span class="cert-badge b-gold">Food Safety</span></div>
         <div class="cert-name">Food Handling Certificate</div>
         <p class="cert-desc">Food service safety and hygiene training — relevant to providing meal support and nutrition assistance to clients.</p>
         <p class="cert-status" data-role="status">Checking availability…</p>
         <div class="cert-actions">
-            <a class="btn btn-primary" href="assets/certificates/Food-Handling-Certificate.pdf" download data-role="download" aria-label="Download Food Handling Certificate"><i class="fa-solid fa-download"></i> Download</a>
-            <a class="btn btn-outline" href="assets/certificates/Food-Handling-Certificate.pdf" target="_blank" rel="noopener" data-role="preview" aria-label="Preview Food Handling Certificate"><i class="fa-regular fa-eye"></i> Preview</a>
+            <a class="btn btn-primary" href="assets/certificates/Food-Handling-Certificate.pdf" download data-role="download"><i class="fa-solid fa-download"></i> Download</a>
+            <a class="btn btn-outline" href="assets/certificates/Food-Handling-Certificate.pdf" data-role="preview" onclick="openPdfModal(this);return false;" data-pdf-title="Food Handling Certificate"><i class="fa-regular fa-eye"></i> Preview</a>
         </div>
         </article>
 
-        <!-- Dementia -->
         <article class="cert-card" data-cert data-cert-file="assets/certificates/Dementia-Course-Certificate.pdf">
-        <div class="cert-top">
-            <div class="cert-ico ico-slate"><i class="fa-solid fa-brain"></i></div>
-            <span class="cert-badge b-slate">Specialised Care</span>
-        </div>
+        <div class="cert-top"><div class="cert-ico ico-slate"><i class="fa-solid fa-brain"></i></div><span class="cert-badge b-slate">Specialised Care</span></div>
         <div class="cert-name">Dementia Care Certificate</div>
         <p class="cert-desc">Dementia care fundamentals — person-centred approaches, responsive behaviours, communication strategies.</p>
         <p class="cert-status" data-role="status">Checking availability…</p>
         <div class="cert-actions">
-            <a class="btn btn-primary" href="assets/certificates/Dementia-Course-Certificate.pdf" download data-role="download" aria-label="Download Dementia Care Certificate"><i class="fa-solid fa-download"></i> Download</a>
-            <a class="btn btn-outline" href="assets/certificates/Dementia-Course-Certificate.pdf" target="_blank" rel="noopener" data-role="preview" aria-label="Preview Dementia Care Certificate"><i class="fa-regular fa-eye"></i> Preview</a>
+            <a class="btn btn-primary" href="assets/certificates/Dementia-Course-Certificate.pdf" download data-role="download"><i class="fa-solid fa-download"></i> Download</a>
+            <a class="btn btn-outline" href="assets/certificates/Dementia-Course-Certificate.pdf" data-role="preview" onclick="openPdfModal(this);return false;" data-pdf-title="Dementia Care Certificate"><i class="fa-regular fa-eye"></i> Preview</a>
         </div>
         </article>
 
-        <!-- AEC Diploma -->
-        <article class="cert-card" data-cert data-cert-file="assets/certificates/AEC-Software-Development-Diploma.pdf">
-        <div class="cert-top">
-            <div class="cert-ico ico-gold"><i class="fa-solid fa-graduation-cap"></i></div>
-            <span class="cert-badge b-gold">Education</span>
-        </div>
+        <article class="cert-card" data-cert data-cert-file="assets/certificates/aectranscript.pdf">
+        <div class="cert-top"><div class="cert-ico ico-gold"><i class="fa-solid fa-graduation-cap"></i></div><span class="cert-badge b-gold">Education</span></div>
         <div class="cert-name">AEC Diploma — Software Development</div>
         <p class="cert-desc">Attestation of College Studies — Secure Desktop, Mobile and Web Applications. Completed August 2025.</p>
         <p class="cert-status" data-role="status">Checking availability…</p>
         <div class="cert-actions">
-            <a class="btn btn-primary" href="assets/certificates/aectranscript.pdf" download data-role="download" aria-label="Download AEC Diploma"><i class="fa-solid fa-download"></i> Download</a>
-            <a class="btn btn-outline" href="assets/certificates/aectranscript.pdf" target="_blank" rel="noopener" data-role="preview" aria-label="Preview AEC Diploma"><i class="fa-regular fa-eye"></i> Preview</a>
+            <a class="btn btn-primary" href="assets/certificates/aectranscript.pdf" download data-role="download"><i class="fa-solid fa-download"></i> Download</a>
+            <a class="btn btn-outline" href="assets/certificates/aectranscript.pdf" data-role="preview" onclick="openPdfModal(this);return false;" data-pdf-title="AEC Diploma — Software Development"><i class="fa-regular fa-eye"></i> Preview</a>
         </div>
         </article>
 
-        <!-- Driving License -->
         <article class="cert-card" data-cert data-cert-file="assets/certificates/Driving-License.pdf">
-        <div class="cert-top">
-            <div class="cert-ico ico-teal"><i class="fa-solid fa-car"></i></div>
-            <span class="cert-badge b-teal">License</span>
-        </div>
+        <div class="cert-top"><div class="cert-ico ico-teal"><i class="fa-solid fa-car"></i></div><span class="cert-badge b-teal">License</span></div>
         <div class="cert-name">Ontario Driving Licence</div>
         <p class="cert-desc">Valid Ontario driver's licence — demonstrates reliability, independence, and ability to support community-based home care clients across service areas.</p>
         <p class="cert-status" data-role="status">Checking availability…</p>
         <div class="cert-actions">
-            <a class="btn btn-primary" href="assets/certificates/Driving-License.pdf" download data-role="download" aria-label="Download Driving Licence"><i class="fa-solid fa-download"></i> Download</a>
-            <a class="btn btn-outline" href="assets/certificates/Driving-License.pdf" target="_blank" rel="noopener" data-role="preview" aria-label="Preview Driving Licence"><i class="fa-regular fa-eye"></i> Preview</a>
+            <a class="btn btn-primary" href="assets/certificates/Driving-License.pdf" download data-role="download"><i class="fa-solid fa-download"></i> Download</a>
+            <a class="btn btn-outline" href="assets/certificates/Driving-License.pdf" data-role="preview" onclick="openPdfModal(this);return false;" data-pdf-title="Ontario Driving Licence"><i class="fa-regular fa-eye"></i> Preview</a>
         </div>
         </article>
-    
+
     </div>
-    
     </section>
 
     <hr class="divider">
 
-    <!-- ═══════════════════════════════════════════
-    8. ACADEMIC PLAN OF STUDY
-    ═══════════════════════════════════════════ -->
+    <!-- 8. ACADEMIC PLAN OF STUDY -->
     <section id="academic" class="section reveal" aria-labelledby="h-academic">
     <div class="section-label">Section 08</div>
-    <h2 id="h-academic" class="section-heading md">
-        Academic Plan of Study
-        <span class="marks-chip"><i class="fa-solid fa-star"></i> </span>
-    </h2>
+    <h2 id="h-academic" class="section-heading md">Academic Plan of Study <span class="marks-chip"><i class="fa-solid fa-star"></i></span></h2>
     <p class="section-sub">All courses completed and currently in progress during the PSW program, with course descriptions.</p>
 
-    <!-- Semester 1 -->
     <div class="semester-block reveal" style="margin-top:32px">
         <div class="semester-title"><i class="fa-solid fa-book-open"></i> <span>Semester 1</span> — September 2025 to December 2025</div>
         <div style="border-radius:var(--r);overflow:hidden;border:1px solid var(--border)">
         <table class="course-table" style="width:100%">
-            <thead>
-            <tr>
-                <th style="width:130px">Course Code</th>
-                <th>Course Name &amp; Description</th>
-            </tr>
-            </thead>
+            <thead><tr><th style="width:130px">Course Code</th><th>Course Name &amp; Description</th></tr></thead>
             <tbody>
-            <tr>
-                <td><span class="course-code">PSHS 100</span></td>
-                <td>
-                <div class="course-name">Anatomy &amp; Physiology</div>
-                <div class="course-desc">Foundational study of the human body's systems, structures, and functions. This course introduces the anatomical terminology, major organ systems, and physiological processes essential for understanding client conditions and providing safe, informed care as a PSW.</div>
-                </td>
-            </tr>
-            <tr>
-                <td><span class="course-code">PSHS 101</span></td>
-                <td>
-                <div class="course-name">Foundations of Personal Support Worker</div>
-                <div class="course-desc">An introduction to the PSW role within the healthcare system. Topics include the scope of practice, ethical and legal responsibilities, client-centred care principles, the healthcare team, and foundational skills for supporting individuals across the lifespan in community, home, and institutional settings.</div>
-                </td>
-            </tr>
-            <tr>
-                <td><span class="course-code">PSHS 102</span></td>
-                <td>
-                <div class="course-name">Personal Support Communications</div>
-                <div class="course-desc">Develops effective verbal and written communication skills for the PSW setting. Emphasizes therapeutic communication, active listening, documentation, and professional reporting — including how to communicate sensitively with clients, families, and interdisciplinary team members.</div>
-                </td>
-            </tr>
-            <tr>
-                <td><span class="course-code">PSHS 103</span></td>
-                <td>
-                <div class="course-name">Developmental Changes &amp; Alteration in Health</div>
-                <div class="course-desc">Examines human development across the lifespan and how illness, disability, and aging affect physical and psychosocial wellbeing. Students learn to recognize signs of health changes and understand how altered health states impact care needs and independence.</div>
-                </td>
-            </tr>
-            <tr>
-                <td><span class="course-code">PSHS 104</span></td>
-                <td>
-                <div class="course-name">Foundations of Mental Health</div>
-                <div class="course-desc">Introduces common mental health conditions encountered in PSW practice, including depression, anxiety, dementia, and schizophrenia. Focuses on person-centred approaches, reducing stigma, recognizing mental health crises, and supporting clients with compassion and appropriate boundaries.</div>
-                </td>
-            </tr>
+            <tr><td><span class="course-code">PSHS 100</span></td><td><div class="course-name">Anatomy &amp; Physiology</div><div class="course-desc">Foundational study of the human body's systems, structures, and functions. This course introduces the anatomical terminology, major organ systems, and physiological processes essential for understanding client conditions and providing safe, informed care as a PSW.</div></td></tr>
+            <tr><td><span class="course-code">PSHS 101</span></td><td><div class="course-name">Foundations of Personal Support Worker</div><div class="course-desc">An introduction to the PSW role within the healthcare system. Topics include the scope of practice, ethical and legal responsibilities, client-centred care principles, the healthcare team, and foundational skills for supporting individuals across the lifespan in community, home, and institutional settings.</div></td></tr>
+            <tr><td><span class="course-code">PSHS 102</span></td><td><div class="course-name">Personal Support Communications</div><div class="course-desc">Develops effective verbal and written communication skills for the PSW setting. Emphasizes therapeutic communication, active listening, documentation, and professional reporting — including how to communicate sensitively with clients, families, and interdisciplinary team members.</div></td></tr>
+            <tr><td><span class="course-code">PSHS 103</span></td><td><div class="course-name">Developmental Changes &amp; Alteration in Health</div><div class="course-desc">Examines human development across the lifespan and how illness, disability, and aging affect physical and psychosocial wellbeing. Students learn to recognize signs of health changes and understand how altered health states impact care needs and independence.</div></td></tr>
+            <tr><td><span class="course-code">PSHS 104</span></td><td><div class="course-name">Foundations of Mental Health</div><div class="course-desc">Introduces common mental health conditions encountered in PSW practice, including depression, anxiety, dementia, and schizophrenia. Focuses on person-centred approaches, reducing stigma, recognizing mental health crises, and supporting clients with compassion and appropriate boundaries.</div></td></tr>
             </tbody>
         </table>
         </div>
     </div>
 
-    <!-- Semester 2 -->
     <div class="semester-block reveal">
         <div class="semester-title"><i class="fa-solid fa-book-open"></i> <span>Semester 2</span> — January 2026 to April 2026 <em style="font-weight:400;font-style:italic;color:var(--ink3);margin-left:8px">(Currently Enrolled)</em></div>
         <div style="border-radius:var(--r);overflow:hidden;border:1px solid var(--border)">
         <table class="course-table" style="width:100%">
-            <thead>
-            <tr>
-                <th style="width:130px">Course Code</th>
-                <th>Course Name &amp; Description</th>
-            </tr>
-            </thead>
+            <thead><tr><th style="width:130px">Course Code</th><th>Course Name &amp; Description</th></tr></thead>
             <tbody>
-            <tr>
-                <td><span class="course-code">PSHS 122</span></td>
-                <td>
-                <div class="course-name">Supporting Clients in Palliative Care</div>
-                <div class="course-desc">Focuses on providing compassionate, dignified care for clients and families during the end-of-life process. Topics include pain and symptom management principles, emotional and spiritual support, communication with grieving families, and the PSW's role within the palliative care team.</div>
-                </td>
-            </tr>
-            <tr>
-                <td><span class="course-code">PSHS 123</span></td>
-                <td>
-                <div class="course-name">Personal &amp; Professional Growth</div>
-                <div class="course-desc">Supports students in developing professional identity, resilience, and self-care strategies essential for sustainable healthcare work. Explores reflective practice, ethical decision-making, workplace professionalism, and the development of the e-portfolio as a career-readiness tool.</div>
-                </td>
-            </tr>
-            <tr>
-                <td><span class="course-code">PSHS 125</span></td>
-                <td>
-                <div class="course-name">Clinical Practice</div>
-                <div class="course-desc">Hands-on supervised clinical placement in an acute care setting (Centenary Hospital, Scarborough Health Network). Students apply all foundational knowledge and skills in a real clinical environment, receiving formal midterm and final evaluations on competency, professionalism, and client care quality.</div>
-                </td>
-            </tr>
-            <tr>
-                <td><span class="course-code">PSHS 126</span></td>
-                <td>
-                <div class="course-name">Community Placement</div>
-                <div class="course-desc">Supervised placement in a community long-term care setting (Seven Oaks, City of Toronto). Students experience supporting residents in a residential care environment, developing skills in holistic client support, team collaboration, and community-based care delivery.</div>
-                </td>
-            </tr>
+            <tr><td><span class="course-code">PSHS 122</span></td><td><div class="course-name">Supporting Clients in Palliative Care</div><div class="course-desc">Focuses on providing compassionate, dignified care for clients and families during the end-of-life process. Topics include pain and symptom management principles, emotional and spiritual support, communication with grieving families, and the PSW's role within the palliative care team.</div></td></tr>
+            <tr><td><span class="course-code">PSHS 123</span></td><td><div class="course-name">Personal &amp; Professional Growth</div><div class="course-desc">Supports students in developing professional identity, resilience, and self-care strategies essential for sustainable healthcare work. Explores reflective practice, ethical decision-making, workplace professionalism, and the development of the e-portfolio as a career-readiness tool.</div></td></tr>
+            <tr><td><span class="course-code">PSHS 125</span></td><td><div class="course-name">Clinical Practice</div><div class="course-desc">Hands-on supervised clinical placement in an acute care setting (Centenary Hospital, Scarborough Health Network). Students apply all foundational knowledge and skills in a real clinical environment, receiving formal midterm and final evaluations on competency, professionalism, and client care quality.</div></td></tr>
+            <tr><td><span class="course-code">PSHS 126</span></td><td><div class="course-name">Community Placement</div><div class="course-desc">Supervised placement in a community long-term care setting (Seven Oaks Long Term Care Home, City of Toronto). Students experience supporting residents in a residential care environment, developing skills in holistic client support, team collaboration, and community-based care delivery.</div></td></tr>
             </tbody>
         </table>
         </div>
     </div>
 
-    <!-- Previous Education -->
     <div class="semester-block reveal">
         <div class="semester-title"><i class="fa-solid fa-laptop-code"></i> <span>Previous Education</span> — September 2023 to August 2025</div>
         <div style="border-radius:var(--r);overflow:hidden;border:1px solid var(--border)">
         <table class="course-table" style="width:100%">
             <thead><tr><th>Program</th><th>Details</th></tr></thead>
-            <tbody>
-            <tr>
-                <td><span class="course-code">AEC</span></td>
-                <td>
-                <div class="course-name">Attestation of College Studies — Software Development</div>
-                <div class="course-desc">Secure Desktop, Mobile and Web Applications. Completed August 2025. This program developed strong technical skills in programming, database management, application security, and project documentation — skills that directly inform my disciplined approach to care documentation, pattern recognition, and problem-solving in healthcare settings.</div>
-                </td>
-            </tr>
-            </tbody>
+            <tbody><tr><td><span class="course-code">AEC</span></td><td><div class="course-name">Attestation of College Studies — Software Development</div><div class="course-desc">Secure Desktop, Mobile and Web Applications. Completed August 2025. This program developed strong technical skills in programming, database management, application security, and project documentation — skills that directly inform my disciplined approach to care documentation, pattern recognition, and problem-solving in healthcare settings.</div></td></tr></tbody>
         </table>
         </div>
     </div>
@@ -1465,186 +455,97 @@
 
     <hr class="divider">
 
-    <!-- ═══════════════════════════════════════════
-    9. REFERENCES
-    ═══════════════════════════════════════════ -->
+    <!-- 9. REFERENCES -->
     <section id="references" class="section reveal" aria-labelledby="h-refs">
     <div class="section-label">Section 09</div>
-    <h2 id="h-refs" class="section-heading md">
-        References
-        <span class="marks-chip"><i class="fa-solid fa-star"></i> </span>
-    </h2>
+    <h2 id="h-refs" class="section-heading md">References <span class="marks-chip"><i class="fa-solid fa-star"></i></span></h2>
     <p class="section-sub">Three professional references available upon request. Contact information provided below. Reference letters available on request.</p>
-
     <div class="refs-grid stagger" style="margin-top:28px">
 
-        <!-- Reference 1 -->
         <div class="ref-card">
         <div class="ref-header">
             <div class="ref-avatar" style="background:var(--teal)">DL</div>
-            <div>
-            <div class="ref-name">Denise Lacey <span style="font-size:12px;color:var(--ink3);font-weight:400"></span></div>
-            <div class="ref-title">Clinical Instructor, Centenary Hospital, Centennial College</div>
-            </div>
+            <div><div class="ref-name">Denise Lacey</div><div class="ref-title">Clinical Instructor, Centenary Hospital, Centennial College</div></div>
         </div>
-        <div class="ref-relation">Clinical Intructor — PSHS 125</div>
+        <div class="ref-relation">Clinical Instructor — PSHS 125</div>
         <div class="ref-rows">
-            <div class="ref-row"><i class="fa-solid fa-envelope"></i><span>dlacey@my.centennialcollege.ca <em style="color:var(--ink3)"></em></span></div>
-            <div class="ref-row"><i class="fa-solid fa-phone"></i><span>+1 (416) 518-4659 <em style="color:var(--ink3)"></em></span></div>
+            <div class="ref-row"><i class="fa-solid fa-envelope"></i><span><a href="mailto:dlacey@my.centennialcollege.ca">dlacey@my.centennialcollege.ca</a></span></div>
+            <div class="ref-row"><i class="fa-solid fa-phone"></i><span>+1 (416) 518-4659</span></div>
             <div class="ref-row"><i class="fa-solid fa-building-columns"></i><span>Scarborough Health Network, Centenary Hospital</span></div>
         </div>
         </div>
 
-        <!-- Reference 2 -->
         <div class="ref-card">
         <div class="ref-header">
             <div class="ref-avatar" style="background:var(--gold)">DM</div>
-            <div>
-            <div class="ref-name">Dornette.Moncrieffe <span style="font-size:12px;color:var(--ink3);font-weight:400"></span></div>
-            <div class="ref-title">Preceptor, Seven Oaks Long Term Care Home</div>
-            </div>
+            <div><div class="ref-name">Dornette Moncrieffe</div><div class="ref-title">Preceptor, Seven Oaks Long Term Care Home</div></div>
         </div>
-        <div class="ref-relation">Preceptor</div>
+        <div class="ref-relation">Preceptor — PSHS 126</div>
         <div class="ref-rows">
-            <div class="ref-row"><i class="fa-solid fa-envelope"></i><span>dornett35@gmail.com <em style="color:var(--ink3)"></em></span></div>
-            <div class="ref-row"><i class="fa-solid fa-phone"></i><span>+1 (647) 209-8661 <em style="color:var(--ink3)"></em></span></div>
+            <div class="ref-row"><i class="fa-solid fa-envelope"></i><span><a href="mailto:dornett35@gmail.com">dornett35@gmail.com</a></span></div>
+            <div class="ref-row"><i class="fa-solid fa-phone"></i><span>+1 (647) 209-8661</span></div>
             <div class="ref-row"><i class="fa-solid fa-building-columns"></i><span>City of Toronto, Seven Oaks Long Term Care Home</span></div>
         </div>
         </div>
 
-        <!-- Reference 3 -->
         <div class="ref-card">
         <div class="ref-header">
             <div class="ref-avatar" style="background:var(--slate)">SS</div>
-            <div>
-            <div class="ref-name">Shelly-Ann-Sheon <span style="font-size:12px;color:var(--ink3);font-weight:400"></span></div>
-            <div class="ref-title">Lab Instructor, Centennial College</div>
-            </div>
+            <div><div class="ref-name">Shelly-Ann Sheon</div><div class="ref-title">Lab Instructor, Centennial College</div></div>
         </div>
-        <div class="ref-relation">Lab Instructor - PSHS 105</div>
+        <div class="ref-relation">Lab Instructor — PSHS 105</div>
         <div class="ref-rows">
-            <div class="ref-row"><i class="fa-solid fa-envelope"></i><span>sseon@my.centennialcollege.ca <em style="color:var(--ink3)"></em></span></div>
-            <div class="ref-row"><i class="fa-solid fa-phone"></i><span>+1 (416) 568-6139<em style="color:var(--ink3)"></em></span></div>
+            <div class="ref-row"><i class="fa-solid fa-envelope"></i><span><a href="mailto:sseon@my.centennialcollege.ca">sseon@my.centennialcollege.ca</a></span></div>
+            <div class="ref-row"><i class="fa-solid fa-phone"></i><span>+1 (416) 568-6139</span></div>
             <div class="ref-row"><i class="fa-solid fa-building-columns"></i><span>Centennial College, Lab Instructor</span></div>
         </div>
         </div>
 
     </div>
-
-    <!--<div style="margin-top:20px;padding:16px 20px;border-radius:var(--r-sm);background:var(--gold-lt);border:1px solid color-mix(in srgb,var(--gold) 20%,transparent);font-size:14px;color:var(--ink2)">
-        <i class="fa-solid fa-circle-info" style="color:var(--gold);margin-right:8px"></i>
-        <strong>Note:</strong> Placeholder names and contact details are shown above. Please replace with real reference names and updated contact information before submission. Reference letters are available upon request.
-    </div> -->
     </section>
 
     <hr class="divider">
 
-    <!-- ═══════════════════════════════════════════
-    10. GLOBAL CITIZENSHIP
-    ═══════════════════════════════════════════ -->
+    <!-- 10. GLOBAL CITIZENSHIP -->
     <section id="global" class="section reveal" aria-labelledby="h-global">
     <div class="section-label">Section 10</div>
-    <h2 id="h-global" class="section-heading md">
-        Global Citizenship
-        <span class="marks-chip"><i class="fa-solid fa-star"></i></span>
-    </h2>
+    <h2 id="h-global" class="section-heading md">Global Citizenship <span class="marks-chip"><i class="fa-solid fa-star"></i></span></h2>
     <p class="section-sub">Group assignment completed in PSHS 104 — Foundations of Mental Health.</p>
-
     <div class="global-layout" style="margin-top:28px">
         <div class="global-main reveal">
         <h4>About the Assignment</h4>
-<p>
-    The Global Citizenship assignment was a collaborative group project completed as part of PSHS 104 — Foundations of Mental Health. Our group focused on 
-    mental health awareness and equity in the Philippines, with a comparative analysis of the Canadian healthcare context.
-</p>
-
-<p>
-    The purpose of the assignment was to explore mental health laws, stigma, and equity issues, while examining how cultural beliefs and systemic factors influence 
-    access to care. We analyzed key legislation such as the Philippine Mental Health Act (RA 11036) and compared it with Canadian frameworks like the Ontario Human Rights Code 
-    and AODA to understand differences in implementation and accessibility.
-</p>
-
-<p>
-    Key themes included stigma and traditional beliefs surrounding mental illness, barriers to care such as discrimination in employment, education, and housing, and 
-    the experiences of vulnerable populations including youth, women, LGBTQ+ individuals, and Indigenous communities. We also explored how public awareness campaigns and 
-    community programs aim to reduce stigma and improve mental health support.
-</p>
-
-<p>
-    The assignment emphasized the role of Personal Support Workers (PSWs) in promoting equity through compassionate care, therapeutic communication, cultural respect, 
-    and advocacy for inclusive and stigma-free environments.
-</p>
-
-<p style="margin-bottom:0">
-    <strong>My contribution:</strong> I contributed to researching mental health stigma, legal frameworks, and equity issues, and helped structure and organize the presentation. 
-    This experience strengthened my understanding of how cultural context and systemic barriers impact mental health, reinforcing the importance of delivering respectful, 
-    culturally aware, and person-centered care as a PSW.
-</p>
-    </div>
-
-            <div class="global-sidebar stagger">
-
-        <div class="global-stat">
-            <div class="gs-icon"><i class="fa-solid fa-earth-americas"></i></div>
-            <div>
-                <div class="gs-label">Course</div>
-                <div class="gs-val">PSHS 104 — Foundations of Mental Health</div>
-            </div>
+        <p>The Global Citizenship assignment was a collaborative group project completed as part of PSHS 104 — Foundations of Mental Health. Our group focused on mental health awareness and equity in the Philippines, with a comparative analysis of the Canadian healthcare context.</p>
+        <p>The purpose of the assignment was to explore mental health laws, stigma, and equity issues, while examining how cultural beliefs and systemic factors influence access to care. We analyzed key legislation such as the Philippine Mental Health Act (RA 11036) and compared it with Canadian frameworks like the Ontario Human Rights Code and AODA to understand differences in implementation and accessibility.</p>
+        <p>Key themes included stigma and traditional beliefs surrounding mental illness, barriers to care such as discrimination in employment, education, and housing, and the experiences of vulnerable populations including youth, women, LGBTQ+ individuals, and Indigenous communities. We also explored how public awareness campaigns and community programs aim to reduce stigma and improve mental health support.</p>
+        <p>The assignment emphasized the role of Personal Support Workers (PSWs) in promoting equity through compassionate care, therapeutic communication, cultural respect, and advocacy for inclusive and stigma-free environments.</p>
+        <p style="margin-bottom:0"><strong>My contribution:</strong> I contributed to researching mental health stigma, legal frameworks, and equity issues, and helped structure and organize the presentation. This experience strengthened my understanding of how cultural context and systemic barriers impact mental health, reinforcing the importance of delivering respectful, culturally aware, and person-centered care as a PSW.</p>
         </div>
-
-        <div class="global-stat">
-            <div class="gs-icon"><i class="fa-solid fa-users"></i></div>
-            <div>
-                <div class="gs-label">Format</div>
-                <div class="gs-val">Collaborative Group Project</div>
-            </div>
-        </div>
-
-        <div class="global-stat">
-            <div class="gs-icon"><i class="fa-solid fa-scale-balanced"></i></div>
-            <div>
-                <div class="gs-label">Focus</div>
-                <div class="gs-val">Mental Health Equity — Philippines vs Canada</div>
-            </div>
-        </div>
-
-        <div class="global-stat">
-            <div class="gs-icon"><i class="fa-solid fa-lightbulb"></i></div>
-            <div>
-                <div class="gs-label">Key Themes</div>
-                <div class="gs-val">Stigma, Legal Frameworks, Vulnerable Populations</div>
-            </div>
-        </div>
-
-        <div class="global-stat">
-            <div class="gs-icon"><i class="fa-solid fa-user-pen"></i></div>
-            <div>
-                <div class="gs-label">Role</div>
-                <div class="gs-val">Research & Presentation Design</div>
-            </div>
-        </div>
-
+        <div class="global-sidebar stagger">
+        <div class="global-stat"><div class="gs-icon"><i class="fa-solid fa-earth-americas"></i></div><div><div class="gs-label">Course</div><div class="gs-val">PSHS 104 — Foundations of Mental Health</div></div></div>
+        <div class="global-stat"><div class="gs-icon"><i class="fa-solid fa-users"></i></div><div><div class="gs-label">Format</div><div class="gs-val">Collaborative Group Project</div></div></div>
+        <div class="global-stat"><div class="gs-icon"><i class="fa-solid fa-scale-balanced"></i></div><div><div class="gs-label">Focus</div><div class="gs-val">Mental Health Equity — Philippines vs Canada</div></div></div>
+        <div class="global-stat"><div class="gs-icon"><i class="fa-solid fa-lightbulb"></i></div><div><div class="gs-label">Key Themes</div><div class="gs-val">Stigma, Legal Frameworks, Vulnerable Populations</div></div></div>
+        <div class="global-stat"><div class="gs-icon"><i class="fa-solid fa-user-pen"></i></div><div><div class="gs-label">Role</div><div class="gs-val">Research &amp; Presentation Design</div></div></div>
         <div class="global-stat">
             <div class="gs-icon"><i class="fa-solid fa-file-arrow-down"></i></div>
             <div>
-                <div class="gs-label">Assignment File</div>
-                <a class="btn btn-sm btn-primary" style="margin-top:6px" href="assets/certificates/GC-E-Presentation.pdf" download>
-                    <i class="fa-solid fa-download"></i> Download
-                </a>
+            <div class="gs-label">Assignment File</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">
+                <a class="btn btn-sm btn-primary" href="assets/certificates/GC-E-Presentation.pdf" download><i class="fa-solid fa-download"></i> Download</a>
+                <a class="btn btn-sm btn-outline" href="assets/certificates/GC-E-Presentation.pdf" onclick="openPdfModal(this);return false;" data-pdf-title="Global Citizenship Assignment"><i class="fa-regular fa-eye"></i> Preview</a>
+            </div>
             </div>
         </div>
-
-    </div>
+        </div>
     </div>
     </section>
 
     <hr class="divider">
 
-    <!-- Skills snapshot -->
+    <!-- SKILLS -->
     <section class="section reveal" aria-labelledby="h-skills">
     <div class="section-label">Capabilities</div>
     <h2 id="h-skills" class="section-heading md">Skills &amp; Languages</h2>
-
     <div class="skills-2col" style="margin-top:28px">
         <div>
         <h3 style="font-size:15px;font-weight:700;margin-bottom:16px;color:var(--ink)">PSW Competencies</h3>
@@ -1660,22 +561,10 @@
         <div>
         <h3 style="font-size:15px;font-weight:700;margin-bottom:16px;color:var(--ink)">Languages</h3>
         <div class="lang-section">
-            <div class="lang-item">
-            <div class="lang-header"><span style="font-weight:600">Nepali</span><span class="lang-lv">Fluent &mdash; Mother Tongue</span></div>
-            <div class="lang-track"><div class="lang-fill" data-fill="100"></div></div>
-            </div>
-            <div class="lang-item">
-            <div class="lang-header"><span style="font-weight:600">English</span><span class="lang-lv">Fluent</span></div>
-            <div class="lang-track"><div class="lang-fill" data-fill="100"></div></div>
-            </div>
-            <div class="lang-item">
-            <div class="lang-header"><span style="font-weight:600">French</span><span class="lang-lv">Intermediate</span></div>
-            <div class="lang-track"><div class="lang-fill" data-fill="60"></div></div>
-            </div>
-            <div class="lang-item">
-            <div class="lang-header"><span style="font-weight:600">Chinese (Mandarin)</span><span class="lang-lv">Intermediate</span></div>
-            <div class="lang-track"><div class="lang-fill" data-fill="55"></div></div>
-            </div>
+            <div class="lang-item"><div class="lang-header"><span style="font-weight:600">Nepali</span><span class="lang-lv">Fluent &mdash; Mother Tongue</span></div><div class="lang-track"><div class="lang-fill" data-fill="100"></div></div></div>
+            <div class="lang-item"><div class="lang-header"><span style="font-weight:600">English</span><span class="lang-lv">Fluent</span></div><div class="lang-track"><div class="lang-fill" data-fill="100"></div></div></div>
+            <div class="lang-item"><div class="lang-header"><span style="font-weight:600">French</span><span class="lang-lv">Intermediate</span></div><div class="lang-track"><div class="lang-fill" data-fill="60"></div></div></div>
+            <div class="lang-item"><div class="lang-header"><span style="font-weight:600">Chinese (Mandarin)</span><span class="lang-lv">Intermediate</span></div><div class="lang-track"><div class="lang-fill" data-fill="55"></div></div></div>
         </div>
         </div>
     </div>
@@ -1683,83 +572,55 @@
 
     <hr class="divider">
 
-    <!-- Education & placements timeline -->
+    <!-- JOURNEY / TIMELINE -->
     <section class="section reveal" aria-labelledby="h-tl">
     <div class="section-label">Journey</div>
     <h2 id="h-tl" class="section-heading md">Education &amp; Placement History</h2>
-
     <div class="timeline" style="margin-top:32px">
+
         <div class="tl-entry">
-        <div class="tl-dot"></div>
+        <div class="tl-card-small"><span class="tl-tag-pill pill-edu">Education — Completed</span><div class="tl-title-sm">AEC in Software Development</div><div class="tl-sub-sm">Secure Desktop, Mobile and Web Applications</div><p class="tl-body-sm">Developed discipline, documentation habits, and systematic problem-solving — directly applied to PSW practice.</p></div>
         <div class="tl-meta">Sep 2023 – Aug 2025</div>
-        <div class="tl-card-small">
-            <span class="tl-tag-pill pill-edu">Education — Completed</span>
-            <div class="tl-title-sm">AEC in Software Development</div>
-            <div class="tl-sub-sm">Secure Desktop, Mobile and Web Applications</div>
-            <p class="tl-body-sm">Developed discipline, documentation habits, and systematic problem-solving — directly applied to PSW practice.</p>
         </div>
-        </div>
+
         <div class="tl-entry">
-        <div class="tl-dot"></div>
+        <div class="tl-meta">Jan 2024 – Aug 2024</div>
+        <div class="tl-card-small"><span class="tl-tag-pill pill-work">Work Experience</span><div class="tl-title-sm">Forum Research Inc. — Customer Service Representative</div><div class="tl-sub-sm">Toronto, ON</div><p class="tl-body-sm">Assisted customers with surveys and accurately recorded responses in a database I helped maintain. Fast teamwork and clear communication in a high-volume environment.</p></div>
+        </div>
+
+        <div class="tl-entry">
+        <div class="tl-card-small"><span class="tl-tag-pill pill-vol">Volunteering</span><div class="tl-title-sm">Vanier Student Association</div><div class="tl-sub-sm">Montreal community service</div><p class="tl-body-sm">Volunteer program supporting student and community initiatives — building teamwork, communication, and service skills.</p></div>
         <div class="tl-meta">May 2024 – Aug 2025</div>
-        <div class="tl-card-small">
-            <span class="tl-tag-pill pill-vol">Volunteering</span>
-            <div class="tl-title-sm">Vanier Student Association</div>
-            <div class="tl-sub-sm">Montreal community service</div>
-            <p class="tl-body-sm">Volunteer program supporting student and community initiatives — building teamwork, communication, and service skills.</p>
         </div>
-        </div>
+
         <div class="tl-entry">
-        <div class="tl-dot"></div>
         <div class="tl-meta">Sep 2025 – Apr 2026</div>
-        <div class="tl-card-small">
-            <span class="tl-tag-pill pill-edu">Education — In Progress</span>
-            <div class="tl-title-sm">Personal Support Worker (PSW)</div>
-            <div class="tl-sub-sm">Expected completion April 2026</div>
-            <p class="tl-body-sm">Comprehensive PSW training: 5 theory courses, 4 clinical/community courses, lab skills, and two supervised placements.</p>
+        <div class="tl-card-small"><span class="tl-tag-pill pill-edu">Education — In Progress</span><div class="tl-title-sm">Personal Support Worker (PSW)</div><div class="tl-sub-sm">Expected completion April 2026</div><p class="tl-body-sm">Comprehensive PSW training: 5 theory courses, 4 clinical/community courses, lab skills, and two supervised placements.</p></div>
         </div>
-        </div>
+
         <div class="tl-entry">
-        <div class="tl-dot"></div>
+        <div class="tl-card-small"><span class="tl-tag-pill pill-place">Clinical Placement</span><div class="tl-title-sm">Centenary Hospital — Scarborough Health Network</div><div class="tl-sub-sm">PSHS 125 — Clinical Practice</div><p class="tl-body-sm">Hands-on acute care experience with midterm and final evaluations. Applied all foundational skills under clinical supervision.</p></div>
         <div class="tl-meta">Jan 2026 – Mar 2026</div>
-        <div class="tl-card-small">
-            <span class="tl-tag-pill pill-place">Clinical Placement</span>
-            <div class="tl-title-sm">Centenary Hospital — Scarborough Health Network</div>
-            <div class="tl-sub-sm">PSHS 125 — Clinical Practice</div>
-            <p class="tl-body-sm">Hands-on acute care experience with midterm and final evaluations. Applied all foundational skills under clinical supervision.</p>
         </div>
-        </div>
+
         <div class="tl-entry">
-        <div class="tl-dot"></div>
         <div class="tl-meta">Mar 2026 – Apr 2026</div>
-        <div class="tl-card-small">
-            <span class="tl-tag-pill pill-place">Community Placement</span>
-            <div class="tl-title-sm">Seven Oaks Long Term Care Home — City of Toronto</div>
-            <div class="tl-sub-sm">PSHS 126 — Community Placement</div>
-            <p class="tl-body-sm">Long-term care community placement — supporting residents with daily living activities in a residential care environment.</p>
+        <div class="tl-card-small"><span class="tl-tag-pill pill-place">Community Placement</span><div class="tl-title-sm">Seven Oaks Long Term Care Home — City of Toronto</div><div class="tl-sub-sm">PSHS 126 — Community Placement</div><p class="tl-body-sm">Long-term care community placement — supporting residents with daily living activities in a residential care environment.</p></div>
         </div>
-        </div>
+
     </div>
     </section>
 
     <hr class="divider">
 
-        <!-- ═══════════════════════════════════════════
-    PROFESSIONAL EXPERIENCE
-    ═══════════════════════════════════════════ -->
+    <!-- PROFESSIONAL EXPERIENCE -->
     <section id="experience" class="section reveal" aria-labelledby="h-exp">
     <div class="section-label">Work History</div>
     <h2 id="h-exp" class="section-heading md">Professional Experience</h2>
     <p class="section-sub">Relevant work experience that has shaped my professional communication, documentation, and teamwork skills.</p>
-    
     <div style="margin-top:32px;display:flex;flex-direction:column;gap:16px">
-    
-        <div class="card" style="display:grid;grid-template-columns:auto 1fr auto;gap:20px;align-items:start">
-        <!-- Icon -->
-        <div style="width:52px;height:52px;border-radius:14px;background:var(--slate-lt);color:var(--slate);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">
-            <i class="fa-solid fa-headset"></i>
-        </div>
-        <!-- Content -->
+        <div class="card" style="display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:start">
+        <div style="width:52px;height:52px;border-radius:14px;background:var(--slate-lt);color:var(--slate);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0"><i class="fa-solid fa-headset"></i></div>
         <div>
             <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px">
             <span style="font-size:17px;font-weight:700;color:var(--ink)">Customer Service Representative</span>
@@ -1768,22 +629,10 @@
             <div style="font-size:14px;font-weight:600;color:var(--teal);margin-bottom:4px">Forum Research Inc.</div>
             <div style="font-size:13px;color:var(--ink3);margin-bottom:16px;font-family:var(--f-mono)">January 2024 – August 2024 &nbsp;·&nbsp; Toronto, ON</div>
             <ul style="display:flex;flex-direction:column;gap:9px">
-            <li style="display:flex;gap:10px;font-size:14px;color:var(--ink2);line-height:1.6">
-                <i class="fa-solid fa-circle-check" style="color:var(--teal);font-size:13px;margin-top:3px;flex-shrink:0"></i>
-                Assisted customers with survey completion, ensuring accurate and thorough data collection in a professional, courteous manner.
-            </li>
-            <li style="display:flex;gap:10px;font-size:14px;color:var(--ink2);line-height:1.6">
-                <i class="fa-solid fa-circle-check" style="color:var(--teal);font-size:13px;margin-top:3px;flex-shrink:0"></i>
-                Maintained and updated a customer response database — recording all entries accurately and ensuring data integrity across each session.
-            </li>
-            <li style="display:flex;gap:10px;font-size:14px;color:var(--ink2);line-height:1.6">
-                <i class="fa-solid fa-circle-check" style="color:var(--teal);font-size:13px;margin-top:3px;flex-shrink:0"></i>
-                Demonstrated fast, clear teamwork and communication skills in a high-volume, deadline-driven environment.
-            </li>
-            <li style="display:flex;gap:10px;font-size:14px;color:var(--ink2);line-height:1.6">
-                <i class="fa-solid fa-circle-check" style="color:var(--teal);font-size:13px;margin-top:3px;flex-shrink:0"></i>
-                Developed strong attention to detail and professional documentation habits — directly transferable to PSW charting and client record-keeping.
-            </li>
+            <li style="display:flex;gap:10px;font-size:14px;color:var(--ink2);line-height:1.6"><i class="fa-solid fa-circle-check" style="color:var(--teal);font-size:13px;margin-top:3px;flex-shrink:0"></i>Assisted customers with survey completion, ensuring accurate and thorough data collection in a professional, courteous manner.</li>
+            <li style="display:flex;gap:10px;font-size:14px;color:var(--ink2);line-height:1.6"><i class="fa-solid fa-circle-check" style="color:var(--teal);font-size:13px;margin-top:3px;flex-shrink:0"></i>Maintained and updated a customer response database — recording all entries accurately and ensuring data integrity across each session.</li>
+            <li style="display:flex;gap:10px;font-size:14px;color:var(--ink2);line-height:1.6"><i class="fa-solid fa-circle-check" style="color:var(--teal);font-size:13px;margin-top:3px;flex-shrink:0"></i>Demonstrated fast, clear teamwork and communication skills in a high-volume, deadline-driven environment.</li>
+            <li style="display:flex;gap:10px;font-size:14px;color:var(--ink2);line-height:1.6"><i class="fa-solid fa-circle-check" style="color:var(--teal);font-size:13px;margin-top:3px;flex-shrink:0"></i>Developed strong attention to detail and professional documentation habits — directly transferable to PSW charting and client record-keeping.</li>
             </ul>
             <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:16px">
             <span style="padding:5px 12px;border-radius:99px;font-size:12px;font-weight:500;background:var(--teal-lt);color:var(--teal);border:1px solid var(--teal-mid)">Data Entry</span>
@@ -1793,72 +642,33 @@
             <span style="padding:5px 12px;border-radius:99px;font-size:12px;font-weight:500;background:var(--teal-lt);color:var(--teal);border:1px solid var(--teal-mid)">Documentation</span>
             </div>
         </div>
-        <!-- Date badge (desktop only) -->
-        <div style="text-align:right;flex-shrink:0;display:none" class="exp-date-badge">
-            <div style="font-family:var(--f-mono);font-size:11px;font-weight:600;color:var(--ink3);white-space:nowrap">Jan 2024<br>Aug 2024</div>
         </div>
-        </div>
-    
     </div>
     </section>
-    
+
     <hr class="divider">
 
-    <!-- ═══════════════════════════════════════════
-    CONTACT
-    ═══════════════════════════════════════════ -->
+    <!-- CONTACT -->
     <section id="contact" class="section reveal" aria-labelledby="h-contact">
     <div class="section-label">Connect</div>
     <h2 id="h-contact" class="section-heading md">Get in Touch</h2>
-    <p class="section-sub">Open to placements, volunteering, and entry-level PSW opportunities. Reach out via email or LinkedIn.</p>
-
+    <p class="section-sub">Open to entry-level PSW opportunities in LTC, Hospital or Home Care. Reach out via email or LinkedIn.</p>
     <div class="contact-2col">
         <div class="card">
-        <form class="contact-form" action="mailto:Sajjangautam28@gmail.com" method="post" enctype="text/plain" aria-label="Contact form">
-            <div class="form-field">
-            <label for="c-name">Your Name</label>
-            <input id="c-name" name="name" type="text" placeholder="Your Name" required />
-            </div>
-            <div class="form-field">
-            <label for="c-email">Email Address</label>
-            <input id="c-email" name="email" type="email" placeholder="your.emailaddress@example.com" required />
-            </div>
-            <div class="form-field">
-            <label for="c-org">Organization (optional)</label>
-            <input id="c-org" name="org" type="text" placeholder="Scarborough Health Network" />
-            </div>
-            <div class="form-field">
-            <label for="c-msg">Message</label>
-            <textarea id="c-msg" name="message" rows="5" placeholder="I'd like to connect about a PSW position…" required></textarea>
-            </div>
-            <div class="form-row">
-            <button type="submit" class="btn btn-primary">Send Message <i class="fa-solid fa-paper-plane"></i></button>
-            <a class="btn btn-outline" href="https://formspree.io/f/your-id" target="_blank" rel="noopener">Use Formspree</a>
-            </div>
+        <form class="contact-form" aria-label="Contact form">
+            <div class="form-field"><label for="c-name">Your Name</label><input id="c-name" name="name" type="text" placeholder="Your Name" required /></div>
+            <div class="form-field"><label for="c-email">Email Address</label><input id="c-email" name="email" type="email" placeholder="youremail@example.com" required /></div>
+            <div class="form-field"><label for="c-org">Organization (optional)</label><input id="c-org" name="org" type="text" placeholder="Scarborough Health Network" /></div>
+            <div class="form-field"><label for="c-msg">Message</label><textarea id="c-msg" name="message" rows="5" placeholder="I'd like to connect about a PSW position…" required></textarea></div>
+            <div class="form-row"><button type="submit" class="btn btn-primary">Send Message <i class="fa-solid fa-paper-plane"></i></button></div>
         </form>
         </div>
-
         <div class="contact-sidebar-items">
-        <div class="ci">
-            <div class="ci-icon"><i class="fa-solid fa-envelope"></i></div>
-            <div><div class="ci-lbl">Email</div><div class="ci-val"><a href="mailto:Sajjangautam28@gmail.com">Sajjangautam28@gmail.com</a></div></div>
-        </div>
-        <div class="ci">
-            <div class="ci-icon"><i class="fa-solid fa-phone"></i></div>
-            <div><div class="ci-lbl">Phone</div><div class="ci-val">+1 (514) 576-4015</div></div>
-        </div>
-        <div class="ci">
-            <div class="ci-icon"><i class="fa-solid fa-location-dot"></i></div>
-            <div><div class="ci-lbl">Location</div><div class="ci-val">Toronto, ON, Canada</div></div>
-        </div>
-        <div class="ci">
-            <div class="ci-icon"><i class="fab fa-linkedin"></i></div>
-            <div>
-            <div class="ci-lbl">LinkedIn</div>
-            <div class="ci-val"><a href="https://www.linkedin.com/in/sajjan-gautam-68891a19a" target="_blank" rel="noopener">sajjan-gautam-68891a19a</a></div>
-            </div>
-        </div>
-        <div class="avail-row"><div class="pulse-dot"></div> Available for placements &amp; entry-level PSW roles</div>
+        <div class="ci"><div class="ci-icon"><i class="fa-solid fa-envelope"></i></div><div><div class="ci-lbl">Email</div><div class="ci-val"><a href="mailto:Sajjangautam28@gmail.com">Sajjangautam28@gmail.com</a></div></div></div>
+        <div class="ci"><div class="ci-icon"><i class="fa-solid fa-phone"></i></div><div><div class="ci-lbl">Phone</div><div class="ci-val">+1 (514) 576-4015</div></div></div>
+        <div class="ci"><div class="ci-icon"><i class="fa-solid fa-location-dot"></i></div><div><div class="ci-lbl">Location</div><div class="ci-val">Toronto, ON, Canada</div></div></div>
+        <div class="ci"><div class="ci-icon"><i class="fab fa-linkedin"></i></div><div><div class="ci-lbl">LinkedIn</div><div class="ci-val"><a href="https://www.linkedin.com/in/sajjan-gautam-68891a19a" target="_blank" rel="noopener">sajjan-gautam-68891a19a</a></div></div></div>
+        <div class="avail-row"><div class="pulse-dot"></div> Available for entry-level PSW roles in LTC, Hospital or Home Care</div>
         </div>
     </div>
     </section>
@@ -1868,10 +678,7 @@
     <!-- Footer -->
     <footer>
     <div class="footer-inner">
-        <div class="footer-brand">
-        <div class="logo-mark">SG</div>
-        <span>Sajjan Gautam — PSW E-Portfolio</span>
-        </div>
+        <div class="footer-brand"><div class="logo-mark">SG</div><span>Sajjan Gautam — PSW E-Portfolio</span></div>
         <div class="footer-links">
         <a href="https://www.linkedin.com/in/sajjan-gautam-68891a19a" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
         <a href="mailto:Sajjangautam28@gmail.com" aria-label="Email"><i class="fa-solid fa-envelope"></i></a>
@@ -1879,14 +686,12 @@
         </div>
         <div class="footer-copy">© <span id="year"></span> Sajjan Gautam</div>
     </div>
-    <div style="max-width:1100px;margin:0 auto;padding-top:0 clamp(16px,5vw,56px)">
-        <p class="apa-note">© 2026. All rights reserved. This portfolio is intended for educational purposes only and may not be reproduced without permission.</p>    </div>
+    <div style="max-width:1100px;margin:0 auto">
+        <p class="apa-note">© 2026. All rights reserved. This portfolio is intended for educational purposes only and may not be reproduced without permission.</p>
+    </div>
     </footer>
 
-    <!-- Back to top -->
     <button id="backToTop" aria-label="Back to top"><i class="fa-solid fa-arrow-up"></i></button>
-
-    <!-- Toast -->
     <div id="toast" role="status" aria-live="polite"></div>
 
     <script>
@@ -1895,42 +700,47 @@
     const $ = (s,r=document) => r.querySelector(s);
     const $$ = (s,r=document) => [...r.querySelectorAll(s)];
 
-    // Year
+    /* Year */
     const yr = $('#year'); if(yr) yr.textContent = new Date().getFullYear();
 
-    // Theme
+    /* Feature 4: Theme with radial wipe */
     const TKEY = 'psw-theme-v2';
-    const themeBtn = $('#themeBtn');
+    const themeBtn  = $('#themeBtn');
     const themeIcon = $('#themeIcon');
+    const wipeEl    = $('#theme-wipe');
     function applyTheme(t) {
         document.body.dataset.theme = t;
-        localStorage.setItem(TKEY,t);
+        localStorage.setItem(TKEY, t);
         if(themeIcon) themeIcon.className = t==='dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
     }
-    const saved = localStorage.getItem(TKEY);
-    const sys = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    applyTheme(saved || sys);
-    themeBtn?.addEventListener('click', () => applyTheme(document.body.dataset.theme==='dark' ? 'light' : 'dark'));
+    applyTheme(localStorage.getItem(TKEY) || (window.matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light'));
+    themeBtn?.addEventListener('click', e => {
+        const next = document.body.dataset.theme === 'dark' ? 'light' : 'dark';
+        if(wipeEl) {
+        const r = themeBtn.getBoundingClientRect();
+        wipeEl.style.setProperty('--wx', (r.left + r.width/2) + 'px');
+        wipeEl.style.setProperty('--wy', (r.top  + r.height/2) + 'px');
+        wipeEl.style.background = next === 'dark' ? '#141210' : '#faf7f2';
+        wipeEl.classList.add('wiping');
+        setTimeout(() => { applyTheme(next); wipeEl.classList.remove('wiping'); }, 560);
+        } else { applyTheme(next); }
+    });
 
-    // Cursor
+    /* Custom cursor */
     const cur = $('#cursor');
     if(cur && window.matchMedia('(pointer:fine)').matches) {
         let cx=innerWidth/2, cy=innerHeight/2, tx=cx, ty=cy;
         document.addEventListener('mousemove', e => { tx=e.clientX; ty=e.clientY; });
-        (function loop() {
-        cx += (tx-cx)*0.13; cy += (ty-cy)*0.13;
-        cur.style.left = cx+'px'; cur.style.top = cy+'px';
-        requestAnimationFrame(loop);
-        })();
-        $$('a,button,[role="button"],.cert-card,.toc-link,.value-item,.goal-card,.ref-card').forEach(el => {
+        (function loop(){ cx+=(tx-cx)*0.13; cy+=(ty-cy)*0.13; cur.style.left=cx+'px'; cur.style.top=cy+'px'; requestAnimationFrame(loop); })();
+        $$('a,button,.cert-card,.toc-link,.value-item,.goal-card,.ref-card,.dot-nav-item').forEach(el => {
         el.addEventListener('mouseenter', () => document.body.classList.add('c-hover'));
         el.addEventListener('mouseleave', () => document.body.classList.remove('c-hover'));
         });
         document.addEventListener('mousedown', () => document.body.classList.add('c-press'));
-        document.addEventListener('mouseup', () => document.body.classList.remove('c-press'));
+        document.addEventListener('mouseup',   () => document.body.classList.remove('c-press'));
     }
 
-    // Toast
+    /* Toast */
     const toastEl = $('#toast');
     let toastTm;
     function toast(msg) {
@@ -1938,10 +748,18 @@
         toastEl.textContent = msg;
         toastEl.classList.add('show');
         clearTimeout(toastTm);
-        toastTm = setTimeout(() => toastEl.classList.remove('show'), 3200);
+        toastTm = setTimeout(() => toastEl.classList.remove('show'), 3500);
     }
 
-    // Intersection observer helper
+    /* Feature 5: Scroll progress bar */
+    const progressBar = $('#scroll-progress');
+    window.addEventListener('scroll', () => {
+        if(!progressBar) return;
+        const max = document.documentElement.scrollHeight - innerHeight;
+        progressBar.style.width = (max > 0 ? (scrollY/max)*100 : 0) + '%';
+    }, {passive:true});
+
+    /* IntersectionObserver helper */
     function observe(els, fn, opts={}) {
         if(!('IntersectionObserver' in window)) { els.forEach(fn); return; }
         const io = new IntersectionObserver((entries,obs) => {
@@ -1950,96 +768,145 @@
         els.forEach(el => io.observe(el));
     }
 
-    // Section reveals
+    /* Section reveals */
     observe($$('.reveal'), el => el.classList.add('in'));
-
-    // Stagger grids
     observe($$('.stagger'), el => el.classList.add('in'), {threshold:0.06});
 
-    // Counters
+    /* Counters */
     const counted = new WeakSet();
     observe($$('[data-counter]'), el => {
         if(counted.has(el)) return; counted.add(el);
         const target = Number(el.dataset.target||0);
         const t0 = performance.now();
-        const dur = Math.max(600, Math.min(1600, target * 4));
-        const ease = t => 1 - Math.pow(1-t, 3);
-        (function frame(now) {
-        const p = Math.min(1,(now-t0)/dur);
-        el.textContent = Math.round(ease(p)*target);
-        if(p<1) requestAnimationFrame(frame);
-        })(t0);
+        const dur = Math.max(600, Math.min(1600, target*4));
+        const ease = t => 1-Math.pow(1-t,3);
+        (function frame(now){ const p=Math.min(1,(now-t0)/dur); el.textContent=Math.round(ease(p)*target); if(p<1) requestAnimationFrame(frame); })(performance.now());
     });
 
-    // Language bars
-    observe($$('.lang-fill'), el => {
-        const w = el.dataset.fill || '100';
-        el.style.width = w + '%';
-        el.classList.add('go');
-    }, {threshold:0.3});
+    /* Language bars */
+    observe($$('.lang-fill'), el => { el.style.width=(el.dataset.fill||'100')+'%'; el.classList.add('go'); }, {threshold:0.3});
 
-    // Back to top
+    /* Back to top */
     const btt = $('#backToTop');
     window.addEventListener('scroll', () => btt?.classList.toggle('show', scrollY>500), {passive:true});
     btt?.addEventListener('click', () => scrollTo({top:0,behavior:'smooth'}));
 
-    // Nav active section
+    /* Nav active */
     const secs = $$('section[id]');
-    const nls = $$('.nav-links a');
-    window.addEventListener('scroll', () => {
-        let cur='';
-        secs.forEach(s => { if(scrollY >= s.offsetTop-90) cur=s.id; });
+    const nls  = $$('.nav-links a');
+    function syncNav() {
+        let cur=''; secs.forEach(s => { if(scrollY >= s.offsetTop-90) cur=s.id; });
         nls.forEach(a => a.classList.toggle('active', a.getAttribute('href')==='#'+cur));
-    }, {passive:true});
+    }
+    window.addEventListener('scroll', syncNav, {passive:true});
 
-    // Cert availability
+    /* Feature 6: Floating dot-nav */
+    const dots = $$('.dot-nav-item[data-nav]');
+    function syncDots() {
+        let cur=''; secs.forEach(s => { if(scrollY >= s.offsetTop-120) cur=s.id; });
+        dots.forEach(d => d.classList.toggle('active', d.dataset.nav===cur));
+    }
+    dots.forEach(d => d.addEventListener('click', () => {
+        const t = $('#'+d.dataset.nav); if(t) t.scrollIntoView({behavior:'smooth'});
+    }));
+    window.addEventListener('scroll', syncDots, {passive:true});
+    syncDots();
+
+    /* Feature 2: Typewriter */
+    const twEl = $('#typewriter-target');
+    if(twEl) {
+        const text = 'Personal Support Worker Student \u2014 Cohort 2025\u20132026';
+        let i=0;
+        const cursor = document.createElement('span');
+        cursor.className = 'typewriter-cursor';
+        twEl.appendChild(cursor);
+        function type() {
+        if(i < text.length) { twEl.insertBefore(document.createTextNode(text[i++]), cursor); setTimeout(type, 38); }
+        else { setTimeout(() => cursor.style.display='none', 1800); }
+        }
+        setTimeout(type, 900);
+    }
+
+    /* Feature 3: PDF modal */
+    const pdfModal  = $('#pdf-modal');
+    const pdfFrame  = $('#pdf-modal-frame');
+    const pdfTitle  = $('#pdf-modal-title');
+    const pdfClose  = $('#pdf-modal-close');
+    window.openPdfModal = function(link) {
+        if(!pdfModal) return;
+        if(pdfFrame) pdfFrame.src = link.getAttribute('href');
+        if(pdfTitle) pdfTitle.textContent = link.dataset.pdfTitle || 'Document Preview';
+        pdfModal.classList.add('open');
+        document.body.style.overflow = 'hidden';
+    };
+    function closePdfModal() {
+        if(!pdfModal) return;
+        pdfModal.classList.remove('open');
+        document.body.style.overflow = '';
+        setTimeout(() => { if(pdfFrame) pdfFrame.src=''; }, 300);
+    }
+    pdfClose?.addEventListener('click', closePdfModal);
+    pdfModal?.addEventListener('click', e => { if(e.target===pdfModal) closePdfModal(); });
+    document.addEventListener('keydown', e => { if(e.key==='Escape') closePdfModal(); });
+
+    /* Certificate availability */
     async function fileOk(url) {
-        try { const r = await fetch(url,{method:'HEAD',cache:'no-store'}); return r.ok; }
-        catch { return false; }
+        try { const r=await fetch(url,{method:'HEAD',cache:'no-store'}); return r.ok; } catch { return false; }
     }
     function disableLink(a, msg) {
         if(!a) return;
-        a.classList.add('is-disabled');
-        a.setAttribute('aria-disabled','true');
-        a.setAttribute('tabindex','-1');
+        a.classList.add('is-disabled'); a.setAttribute('aria-disabled','true'); a.setAttribute('tabindex','-1');
         a.addEventListener('click', e => { e.preventDefault(); toast(msg); });
     }
     $$('[data-cert][data-cert-file]').forEach(async card => {
-        const file = card.dataset.certFile;
-        const status = $('[data-role="status"]', card);
-        const dl = $('[data-role="download"]', card);
-        const pv = $('[data-role="preview"]', card);
+        const file=card.dataset.certFile;
+        const status=$('[data-role="status"]',card);
+        const dl=$('[data-role="download"]',card);
+        const pv=$('[data-role="preview"]',card);
         if(!file) return;
-        const ok = await fileOk(file);
-        if(ok) {
-        if(status) { status.textContent = '✓ PDF available'; status.style.color = 'var(--teal)'; }
-        } else {
-        if(status) status.textContent = `Upload "${file.split('/').pop()}" to enable`;
-        disableLink(dl, `Upload the PDF to enable downloads.`);
-        disableLink(pv, `Upload the PDF to enable preview.`);
+        const ok=await fileOk(file);
+        if(ok) { if(status){status.textContent='✓ PDF available';status.style.color='var(--teal)';} }
+        else {
+        if(status) status.textContent='Upload "'+file.split('/').pop()+'" to enable';
+        disableLink(dl,'Upload the PDF to enable downloads.');
+        disableLink(pv,'Upload the PDF to enable preview.');
         }
     });
 
-    // Magnetic buttons
+    /* Contact form validation → mailto */
+    const CONTACT_EMAIL = 'Sajjangautam28@gmail.com';
+    const contactForm = $('form.contact-form');
+    if(contactForm) {
+        contactForm.addEventListener('submit', e => {
+        e.preventDefault();
+        const nameVal  = ($('#c-name')?.value  || '').trim();
+        const emailVal = ($('#c-email')?.value || '').trim();
+        const msgVal   = ($('#c-msg')?.value   || '').trim();
+        if(nameVal.split(/\s+/).filter(Boolean).length < 2) { toast('Please enter your full name — first and last name.'); $('#c-name')?.focus(); return; }
+        if(!emailVal.includes('@') || emailVal.length < 5) { toast('Please enter a valid email address (must contain @).'); $('#c-email')?.focus(); return; }
+        if(msgVal.split(/\s+/).filter(Boolean).length < 5) { toast('Please write a bit more in your message.'); $('#c-msg')?.focus(); return; }
+        const subject = encodeURIComponent('Portfolio Enquiry from '+nameVal);
+        const body    = encodeURIComponent('Name: '+nameVal+'\nEmail: '+emailVal+'\n\n'+msgVal);
+        window.location.href = 'mailto:'+CONTACT_EMAIL+'?subject='+subject+'&body='+body;
+        toast('\u2713 Opening your email client — message will go to '+CONTACT_EMAIL);
+        });
+    }
+
+    /* Magnetic buttons */
     $$('.btn').forEach(btn => {
         btn.addEventListener('mousemove', e => {
-        const r = btn.getBoundingClientRect();
-        const x = (e.clientX-r.left-r.width/2)*0.1;
-        const y = (e.clientY-r.top-r.height/2)*0.1;
-        btn.style.transform = `translate(${x}px,${y}px) translateY(-2px)`;
+        const r=btn.getBoundingClientRect();
+        btn.style.transform='translate('+(e.clientX-r.left-r.width/2)*0.1+'px,'+(e.clientY-r.top-r.height/2)*0.1+'px) translateY(-2px)';
         });
-        btn.addEventListener('mouseleave', () => btn.style.transform = '');
+        btn.addEventListener('mouseleave', () => btn.style.transform='');
     });
 
-    // Parallax hero name
+    /* Parallax hero */
     const coverInner = $('.cover-inner');
     window.addEventListener('scroll', () => {
-        if(!coverInner) return;
-        const y = scrollY;
-        if(y < innerHeight) {
-        coverInner.style.transform = `translateY(${y*0.14}px)`;
-        coverInner.style.opacity = String(Math.max(0, 1 - y/(innerHeight*0.75)));
-        }
+        if(!coverInner || scrollY >= innerHeight) return;
+        coverInner.style.transform = 'translateY('+(scrollY*0.14)+'px)';
+        coverInner.style.opacity   = String(Math.max(0, 1-scrollY/(innerHeight*0.75)));
     }, {passive:true});
 
     })();
