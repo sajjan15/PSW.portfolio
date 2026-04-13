@@ -6,7 +6,7 @@
 
 ## Live Demo
 
-**[Click here to view the portfolio site](https://sajjan15.github.io/psw-portfolio)**
+**[Click here to view the portfolio site](https://sajjan15.github.io/PSW.portfolio)**
 
 > Update the link above once you have deployed the site to your hosting platform.
 
